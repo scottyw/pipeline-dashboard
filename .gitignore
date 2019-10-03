@@ -1,0 +1,9 @@
+node_modules
+trains.csv
+result.csv
+
+config.toml
+
+public/*
+./web
+./main

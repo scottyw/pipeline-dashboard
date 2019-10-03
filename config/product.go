@@ -1,0 +1,68 @@
+package config
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+
+	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
+)
+
+type Product struct {
+	Name                 string
+	Pipeline             string
+	WallClockTime        time.Duration
+	TotalTime            string
+	StartTime            time.Time
+	EndTime              time.Time
+	WallClockTimeMinutes int
+	TotalTimeMinutes     int
+	TotalTimeDuration    string
+}
+
+func GetProducts() []Product {
+	configData := GetConfig()
+	return configData.Products
+}
+
+func (p *Product) SetVals(jobs []jenkins_types.Pipeline) {
+	timeFormat := "2006-01-02 15:04:05 -0700 MST"
+	// 2019-09-06 10:45:32 -0700 PDT
+
+	p.StartTime = time.Now().AddDate(0, 0, 365)
+	p.EndTime = time.Now().AddDate(0, 0, -365)
+
+	for _, job := range jobs {
+		if job.PipelineJob == p.Pipeline {
+			jobStartTime, err := time.Parse(timeFormat, job.JobDataStrings.StartTime)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			jobEndTime, err := time.Parse(timeFormat, job.JobDataStrings.EndTime)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			if jobStartTime.Before(p.StartTime) && jobStartTime.After(p.StartTime.AddDate(0, 0, -1825)) {
+				fmt.Println("Changing Start")
+				p.StartTime = jobStartTime
+			}
+			if jobEndTime.After(p.EndTime) && jobEndTime.After(p.EndTime.AddDate(0, 0, -1825)) {
+				fmt.Println("Changing End")
+				p.EndTime = jobEndTime
+			}
+
+			p.WallClockTime = p.EndTime.Sub(p.StartTime)
+
+			totalJobMinutes, _ := strconv.Atoi(job.JobDataStrings.TotalMinutes)
+			totalJobHours, _ := strconv.Atoi(job.JobDataStrings.TotalHours)
+
+			p.TotalTimeMinutes = p.TotalTimeMinutes + totalJobMinutes + totalJobHours*60
+		}
+	}
+
+	duration, _ := time.ParseDuration(fmt.Sprintf("%dm", p.TotalTimeMinutes))
+	p.TotalTimeDuration = fmt.Sprintf("%s", duration)
+
+}

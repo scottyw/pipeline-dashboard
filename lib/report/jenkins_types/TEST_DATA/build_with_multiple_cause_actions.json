@@ -1,0 +1,194 @@
+{
+  _class: "hudson.matrix.MatrixBuild",
+  actions: [
+    { },
+{
+_class: "hudson.model.ParametersAction",
+parameters: [
+{
+_class: "hudson.model.StringParameterValue",
+name: "software_version",
+value: ""
+},
+{
+_class: "hudson.model.StringParameterValue",
+name: "SOFTWARE_NEXT",
+value: "false"
+},
+{
+_class: "hudson.model.StringParameterValue",
+name: "p_dogfooding_build",
+value: ""
+},
+{
+_class: "hudson.model.StringParameterValue",
+name: "BEAKER_PRESERVE_HOSTS",
+value: "never"
+},
+{
+_class: "hudson.model.StringParameterValue",
+name: "PLATFORM_AXIS",
+value: "['NOTUSED']"
+}
+]
+},
+{
+_class: "hudson.model.CauseAction",
+causes: [
+{
+_class: "hudson.model.Cause$UpstreamCause",
+shortDescription: "Started by upstream project "project_2019.1.x" build number 64",
+upstreamBuild: 64,
+upstreamProject: "project_2019.1.x",
+upstreamUrl: "job/project_2019.1.x/"
+}
+]
+},
+{
+_class: "hudson.model.CauseAction",
+causes: [
+{
+_class: "com.chikli.hudson.plugin.naginator.NaginatorCause",
+shortDescription: "Started by Naginator after build #116 failure"
+}
+]
+},
+{
+_class: "jenkins.metrics.impl.TimeInQueueAction",
+blockedDurationMillis: 0,
+blockedTimeMillis: 0,
+buildableDurationMillis: 0,
+buildableTimeMillis: 0,
+buildingDurationMillis: 2731198,
+executingTimeMillis: 2731198,
+executorUtilization: 1,
+subTaskCount: 0,
+waitingDurationMillis: 32861,
+waitingTimeMillis: 32861
+},
+{ },
+{ },
+{
+_class: "hudson.plugins.git.util.BuildData",
+buildsByBranchName: {
+origin/2019.1.x: {
+_class: "hudson.plugins.git.util.Build",
+buildNumber: 117,
+buildResult: null,
+marked: {
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+branch: [
+{
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+name: "origin/2019.1.x"
+}
+]
+},
+revision: {
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+branch: [
+{
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+name: "origin/2019.1.x"
+}
+]
+}
+}
+},
+lastBuiltRevision: {
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+branch: [
+{
+SHA1: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ",
+name: "origin/2019.1.x"
+}
+]
+},
+remoteUrls: [
+"git@github.com:example/software_tests.git"
+],
+scmName: ""
+},
+{
+_class: "hudson.plugins.git.GitTagAction"
+},
+{ },
+{
+_class: "hudson.tasks.test.MatrixTestResult",
+failCount: 0,
+skipCount: 17,
+totalCount: 56,
+urlName: "testReport"
+},
+{ },
+{ },
+{ },
+{ },
+{ },
+{ }
+],
+artifacts: [ ],
+building: false,
+description: "2019.1.2-rc1-421-g13577ca",
+displayName: "#117",
+duration: 2731198,
+estimatedDuration: 11001467,
+executor: null,
+fullDisplayName: "example (2019.1.x) 39: Job Number 39 #117",
+id: "117",
+keepLog: false,
+number: 117,
+queueId: 111,
+result: "SUCCESS",
+timestamp: 1568708749176,
+url: "https://jenkins_server.example.com/job/job_1/117/",
+builtOn: "mesos-jenkins-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-workerbeaker",
+changeSet: {
+_class: "hudson.plugins.git.GitChangeSetList",
+items: [ ],
+kind: "git"
+},
+culprits: [ ],
+runs: [
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-1/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-2/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-3/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-4/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-5/116/"
+},
+{
+number: 117,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-6/117/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-7/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-8/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-9/116/"
+},
+{
+number: 116,
+url: "https://jenkins_server.example.com/job/job_1/LAYOUT=layout-10/116/"
+}
+]
+}
