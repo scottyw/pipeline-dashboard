@@ -13,10 +13,10 @@ func TestApplyingValues(t *testing.T) {
 
 	jobData.AssignJobValues(startTime, endTime, totalMinutes)
 
-	if jobData.StartTime.Format("2006-01-02 15:04:05") != "2019-11-11 02:00:00" {
+	if jobData.StartTime.Format("2006-01-02 15:04:05") != "2019-11-11 02:00:00" && jobData.StartTime.Format("2006-01-02 15:04:05") != "2019-11-11 10:00:00" {
 		t.Errorf("Start Time is wrong, got %s", jobData.StartTime.Format("2006-01-02 15:04:05"))
 	}
-	if jobData.EndTime.Format("2006-01-02 15:04:05") != "2019-11-11 03:45:00" {
+	if jobData.EndTime.Format("2006-01-02 15:04:05") != "2019-11-11 03:45:00" && jobData.EndTime.Format("2006-01-02 15:04:05") != "2019-11-11 11:45:00" {
 		t.Errorf("End Time is wrong, got %s", jobData.EndTime.Format("2006-01-02 15:04:05"))
 	}
 
