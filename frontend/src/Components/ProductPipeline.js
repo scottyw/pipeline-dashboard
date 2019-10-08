@@ -38,7 +38,7 @@ class Product extends Component {
     var trains = []
     if (this.state.showTrains) {
       this.props.pipeline.GetTrains().map((value, index) => {
-        trains.push(<PipelineTrain key={index} train={value} />)
+        return trains.push(<PipelineTrain key={index} train={value} />)
       });
     }
 
@@ -51,7 +51,7 @@ class Product extends Component {
         <div className="col-12">
           <div className="row pipeline-row">
             <div className="col-3">
-              <a href={this.props.pipeline.url} target="_blank">{this.props.pipeline.pipeline}</a>
+              <a href={this.props.pipeline.url} target="_blank" rel="noopener noreferrer">{this.props.pipeline.pipeline}</a>
 
             </div>
             <div className="col-1 text-left">

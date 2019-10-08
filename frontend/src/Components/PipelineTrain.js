@@ -25,7 +25,7 @@ class PipelineTrain extends Component {
     return (
       <div className="row train-row text-left">
         <div className="col-12">
-          <a href={this.props.train.url} target="_blank"><b>{this.props.train.name}</b></a>
+          <a href={this.props.train.url} target="_blank" rel="noopener noreferrer"><b>{this.props.train.name}</b></a>
         </div>
         <div className="col-5">
         </div>
