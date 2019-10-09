@@ -9,6 +9,7 @@ import (
 
 type Pipeline struct {
 	JobData              JobData
+	TrainData            map[int][]Train
 	JobDataStrings       *JobDataStrings
 	Server               string
 	BuildNumber          int
@@ -22,6 +23,8 @@ type Pipeline struct {
 	WallClockTimeHours   int64
 	TotalMinutes         int
 	TotalHours           int
+	Transients           int
+	Errors               int
 }
 
 func (ajd *Pipeline) AssignVals() {
@@ -67,6 +70,8 @@ func (ajd *Pipeline) StringArray() []string {
 		fmt.Sprintf("%d", ajd.JobData.WallClockTimeMinutes),
 		fmt.Sprintf("%d", ajd.JobData.TotalHours),
 		fmt.Sprintf("%d", ajd.JobData.TotalMinutes),
+		fmt.Sprintf("%d", ajd.Transients),
+		fmt.Sprintf("%d", ajd.Errors),
 	}
 }
 

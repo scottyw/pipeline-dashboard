@@ -43,6 +43,9 @@ func pageData() *Page {
 
 		buildNumber, _ := strconv.Atoi(line[5])
 
+		transients, _ := strconv.Atoi(line[12])
+		errors, _ := strconv.Atoi(line[13])
+
 		jobs = append(jobs, jenkins_types.Pipeline{
 			URL:         line[0],
 			Server:      line[1],
@@ -58,6 +61,8 @@ func pageData() *Page {
 				TotalHours:           line[10],
 				TotalMinutes:         line[11],
 			},
+			Transients: transients,
+			Errors:     errors,
 		})
 	}
 
@@ -79,6 +84,9 @@ func pageData() *Page {
 		hours := minutes / 60
 		minutesLeft := int(minutes) % 60
 
+		transients, _ := strconv.Atoi(line[8])
+		errors, _ := strconv.Atoi(line[9])
+
 		trains = append(trains, jenkins_types.TrainStrings{
 			Pipeline:            line[0],
 			Version:             line[1],
@@ -90,6 +98,8 @@ func pageData() *Page {
 			StartTime:           line[5],
 			EndTime:             line[6],
 			Timestamp:           line[7],
+			Transients:          transients,
+			Errors:              errors,
 		})
 	}
 

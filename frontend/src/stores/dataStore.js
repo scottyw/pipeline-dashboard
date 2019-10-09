@@ -10,14 +10,19 @@ class Product {
   wallClockTime: 0
   totalTimeDuration: 0
   startTime: ""
+  errors: 0
+  transients: 0
   allJobs: []
 
   constructor(product, jobs) {
+    console.log(product);
     this.name = product.Name;
     this.pipeline = product.Pipeline;
     this.startTime = product.StartTime;
     this.wallClockTime = product.WallClockTime;
     this.totalTimeDuration = product.TotalTimeDuration;
+    this.errors = product.Errors;
+    this.transients = product.Transients;
     this.allJobs = jobs;
   }
 
@@ -43,6 +48,8 @@ class Job {
   pipelineJob: ""
   startTime: ""
   endTime: ""
+  errors: 0
+  transients: 0
   version: ""
   buildNumber: 0
 
@@ -58,6 +65,8 @@ class Job {
     this.buildNumber = job.BuildNumber;
     this.startTime = Date.parse(job.JobDataStrings.StartTime);
     this.endTime = Date.parse(job.JobDataStrings.EndTime);
+    this.errors = job.Errors;
+    this.transients = job.Transients;
     this.allTrains = trains;
   }
 

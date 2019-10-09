@@ -42,6 +42,7 @@ func (g *Getable) Cached(client *redis.Client, url string) (bool, []byte) {
 
 func (g *Getable) Cache(client *redis.Client, url string, body []byte) {
 
+	fmt.Printf("Setting %s in redis.", url)
 	err := client.Set(url, string(body), 0).Err()
 
 	if err != nil {

@@ -13,6 +13,7 @@ type JobDefinition struct {
 }
 
 type Config struct {
+	CithURL     string          `toml:"cith_url"`
 	Products    []Product       `toml:"products"`
 	KickoffJobs []JobDefinition `toml:"kickoff_jobs"`
 	OrderedJobs []JobDefinition `toml:"ordered_jobs"`

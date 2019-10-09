@@ -18,6 +18,8 @@ type Train struct {
 	StartTime       time.Time
 	EndTime         time.Time
 	Timestamp       int64
+	Errors          int
+	Transients      int
 }
 
 type TrainStrings struct {
@@ -31,6 +33,8 @@ type TrainStrings struct {
 	StartTime           string
 	EndTime             string
 	Timestamp           string
+	Errors              int
+	Transients          int
 }
 
 func (t *Train) EndTimeSeconds() int64 {
@@ -45,6 +49,8 @@ func (t *Train) StringArray() []string {
 		fmt.Sprintf("%s", t.StartTime),
 		fmt.Sprintf("%s", t.EndTime),
 		fmt.Sprintf("%d", t.Timestamp),
+		fmt.Sprintf("%d", t.Errors),
+		fmt.Sprintf("%d", t.Transients),
 	}
 }
 

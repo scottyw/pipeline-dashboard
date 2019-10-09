@@ -127,7 +127,7 @@ func LogTree(trainData map[int][]Train) {
 	}
 }
 
-func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) JobData {
+func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobData, map[int][]Train) {
 	trainData := make(map[int][]Train)
 
 	for _, build := range b.List {
@@ -147,9 +147,9 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) JobDa
 					var train Train
 					utils.Log(fmt.Sprintf("Matrix Cell: %s", cell_build.FullDisplayName), cell_build.URL)
 
-					train.JobName = build.JobName
-					train.BuildNumber = build.Number
-					train.URL = build.URL
+					train.JobName = cell_build.JobName
+					train.BuildNumber = cell_build.Number
+					train.URL = cell_build.URL
 					train.Name = cell_build.FullDisplayName
 					train.DurationMinutes = float32(cell_build.Duration) / (60 * 1000)
 					train.StartTime = time.Unix(cell_build.Timestamp/1000, 0)
@@ -241,6 +241,6 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) JobDa
 	utils.Log(fmt.Sprintf("Wall Clock Time Hours: %d", jobData.WallClockTimeHours), "")
 	utils.Log(fmt.Sprintf("Wall Clock Time Minutes: %d", jobData.WallClockTimeMinutes), "")
 
-	return jobData
+	return jobData, trainData
 
 }
