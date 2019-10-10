@@ -13,7 +13,7 @@ export default class Train {
   endTime: ""
   errors: 0
   transients: 0
-  
+
   constructor(train) {
     this.name                = train.Name;
     this.url                 = train.URL;
@@ -25,8 +25,8 @@ export default class Train {
     this.timestamp           = train.Timestamp / 1000;
     this.startTime           = train.StartTime;
     this.endTime             = train.EndTime;
-    this.errors           = train.Errors;
-    this.transients             = train.Transients;
+    this.errors              = train.Errors;
+    this.transients          = train.Transients;
 
   }
 

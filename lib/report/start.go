@@ -53,18 +53,18 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 	for _, pipeline := range pipelines {
 		fmt.Println("=============== A Pipeline =============")
 
-		for _, jobs := range pipeline.TrainData {
+		for ji, jobs := range pipeline.TrainData {
 			fmt.Printf("# of Jobs: %d\n", len(jobs))
-			for _, job := range jobs {
+			for jj, job := range jobs {
 				for ci, failure := range cithFailures {
-					if job.BuildNumber == failure.BuildNumber && strings.Contains(job.URL, failure.Master) && strings.Contains(job.URL, failure.ProjectName) {
+					if (job.BuildNumber == failure.BuildNumber || job.BuildNumber-1 == failure.BuildNumber) && strings.Contains(job.URL, failure.Master) && strings.Contains(job.URL, failure.ProjectName) {
 						if utils.StringSliceContains(transients, failure.CategoryName) {
 							pipeline.Transients++
-							job.Transients++
+							pipeline.TrainData[ji][jj].Transients++
 							cith.Remove(cithFailures, ci)
 						} else if utils.StringSliceContains(errors, failure.CategoryName) {
 							pipeline.Errors++
-							job.Errors++
+							pipeline.TrainData[ji][jj].Errors++
 							cith.Remove(cithFailures, ci)
 						} else {
 							panic(fmt.Sprintf("%s is not a transient or normal error", failure.CategoryName))
@@ -76,7 +76,23 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 		retVal = append(retVal, pipeline)
 	}
 
+	fmt.Println("The following failures did not have any matches: ")
+	for _, failure := range cithFailures {
+		fmt.Printf("%+v\n", failure)
+	}
+
+	csv := jenkins_types.OpenTrainCSV()
+
+	for _, pipeline := range pipelines {
+		for _, jobs := range pipeline.TrainData {
+			for _, job := range jobs {
+				jenkins_types.WriteTrainCSV(csv, job, pipeline.PipelineJob, pipeline.Version)
+			}
+		}
+	}
+
 	return retVal
+
 }
 
 func WriteToCSV(pipelines []jenkins_types.Pipeline) {

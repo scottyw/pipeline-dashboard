@@ -32,6 +32,8 @@ func (p *Product) SetVals(jobs []jenkins_types.Pipeline) {
 	p.StartTime = time.Now().AddDate(0, 0, 365)
 	p.EndTime = time.Now().AddDate(0, 0, -365)
 
+	p.TotalTimeMinutes = 0
+
 	for _, job := range jobs {
 		if job.PipelineJob == p.Pipeline {
 			jobStartTime, err := time.Parse(timeFormat, job.JobDataStrings.StartTime)
