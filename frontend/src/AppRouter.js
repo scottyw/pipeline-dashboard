@@ -13,7 +13,7 @@ function AppRouter() {
         <Navbar.Brand href="/">Home</Navbar.Brand>
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text className="mr-sm-2">
-          Current Time: { new Date().toLocaleString('en-US') }
+            Current Time: { new Date().toLocaleString('en-US') }
           </Navbar.Text>
         </Navbar.Collapse>
       </Navbar>

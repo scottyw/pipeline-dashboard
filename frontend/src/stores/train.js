@@ -11,10 +11,10 @@ export default class Train {
   version: ""
   startTime: ""
   endTime: ""
-
+  errors: 0
+  transients: 0
+  
   constructor(train) {
-    console.log("Creating Train");
-    console.log(train);
     this.name                = train.Name;
     this.url                 = train.URL;
     this.pipeline            = train.Pipeline;
@@ -25,6 +25,9 @@ export default class Train {
     this.timestamp           = train.Timestamp / 1000;
     this.startTime           = train.StartTime;
     this.endTime             = train.EndTime;
+    this.errors           = train.Errors;
+    this.transients             = train.Transients;
+
   }
 
   durationFormatted() {

@@ -78,12 +78,12 @@ class Index extends Component {
             <b>Version</b>
           </div>
           <div className="col-1">
-          <OverlayTrigger
-  placement="right-start"
-  delay={{ show: 250, hide: 400 }}
-  overlay={renderWallClockTimeTooltip}
->
-            <b>Wall Clock Time</b><i class="fas fa-info-circle"></i>
+                <OverlayTrigger
+        placement="right-start"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderWallClockTimeTooltip}
+      >
+            <span><b>Wall Clock Time</b><i class="fas fa-info-circle"></i></span>
             </OverlayTrigger>
           </div>
           <div className="col-1">
@@ -92,14 +92,20 @@ class Index extends Component {
   delay={{ show: 250, hide: 400 }}
   overlay={renderTotalTimeTooltip}
 >
-            <b>Total Time</b><i class="fas fa-info-circle"></i>
+            <span><b>Total Time</b><i class="fas fa-info-circle"></i></span>
             </OverlayTrigger>
           </div>
-          <div className="col-2">
+          <div className="col-1">
             <b>Start Time</b>
           </div>
-          <div className="col-2">
+          <div className="col-1">
             <b>End Time</b>
+          </div>
+          <div className="col-1">
+            <b>Errors</b>
+          </div>
+          <div className="col-1">
+            <b>Transients</b>
           </div>
           <div className="col-1">
             <b>Detail</b>

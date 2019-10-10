@@ -110,11 +110,11 @@ func (o *Ordered) Pull(pipeline_name string, pipeline_version string) jenkins_ty
 
 	subJobsBuilds := jenkins_types.Builds{List: jd.Builds}
 
-	jobData := subJobsBuilds.GetJobData(pipeline_name, pipeline_version)
+	jobData, trainData := subJobsBuilds.GetJobData(pipeline_name, pipeline_version)
 
 	/*
 	 *  Here is where I left off, I need to process all the builds for the sub jobs and turn it into job data.
 	 */
 
-	return jenkins_types.Pipeline{JobData: jobData, URL: o.URL, BuildNumber: lastBuild.Number}
+	return jenkins_types.Pipeline{JobData: jobData, URL: o.URL, BuildNumber: lastBuild.Number, TrainData: trainData}
 }

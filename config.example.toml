@@ -1,3 +1,5 @@
+cith_url = "http://cith_url"
+
 [[products]]
 name = "Product 1"
 pipeline = "product-1"

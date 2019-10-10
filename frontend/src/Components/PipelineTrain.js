@@ -32,13 +32,18 @@ class PipelineTrain extends Component {
         <div className="col-2">
           {this.props.train.durationFormatted()}
         </div>
-        <div className="col-2">
+        <div className="col-1">
           <Moment format="YYYY/MM/DD HH:mm">{this.props.train.startTime}</Moment>
         </div>
-        <div className="col-2">
+        <div className="col-1">
           <Moment format="YYYY/MM/DD HH:mm">{this.props.train.endTime}</Moment>
         </div>
-
+        <div className="col-1">
+          {this.props.train.errors}
+        </div>
+        <div className="col-1">
+          {this.props.train.transients}
+        </div>
       </div>
     )
   }

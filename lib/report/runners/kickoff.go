@@ -93,11 +93,11 @@ func (k *Kickoff) ProcessBuilds(jd jenkins_types.BuildsAndJobs, pipeline_name st
 	utils.LogTree(fmt.Sprintf("Found %d Jobs\n", len(jd.Jobs)), "", 1)
 	subJobsBuilds := jenkins_types.ProcessTopLevelBuilds(jd)
 
-	jobData := subJobsBuilds.GetJobData(pipeline_name, pipeline_version)
+	jobData, trainData := subJobsBuilds.GetJobData(pipeline_name, pipeline_version)
 
 	/*
 	 *  Here is where I left off, I need to process all the builds for the sub jobs and turn it into job data.
 	 */
 
-	return jenkins_types.Pipeline{JobData: jobData, URL: k.URL, BuildNumber: k.LastBuild.Number}
+	return jenkins_types.Pipeline{JobData: jobData, URL: k.URL, BuildNumber: k.LastBuild.Number, TrainData: trainData}
 }

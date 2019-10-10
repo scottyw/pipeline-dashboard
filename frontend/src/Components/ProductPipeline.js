@@ -66,14 +66,20 @@ class Product extends Component {
             <div className="col-1">
               {this.props.pipeline.totalFormatted()}
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <Moment format="YYYY/MM/DD HH:mm">{this.props.pipeline.startTime}</Moment>
             </div>
-            <div className="col-2">
+            <div className="col-1">
               <Moment format="MM/DD HH:mm">{this.props.pipeline.endTime}</Moment>
             </div>
             <div className="col-1">
-              <Button href="#" onClick={() => this.toggleTrain()}>{this.state.showTrains ? 'Close' : 'Trains'}</Button>
+              {this.props.pipeline.errors}
+            </div>
+            <div className="col-1">
+              {this.props.pipeline.transients}
+            </div>
+            <div className="col-1">
+              <Button href="#" onClick={() => this.toggleTrain()}>{this.state.showTrains ? 'Close' : 'Jobs'}</Button>
             </div>
           </div>
         <div className="surround-trains"  >

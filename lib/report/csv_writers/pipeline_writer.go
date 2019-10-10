@@ -28,6 +28,8 @@ func WritePipelines(allPipelines []jenkins_types.Pipeline) {
 		"Wall Clock Time Minutes",
 		"Total Hours",
 		"Total Minutes",
+		"Errors",
+		"Transients",
 	})
 
 	for _, value := range allPipelines {

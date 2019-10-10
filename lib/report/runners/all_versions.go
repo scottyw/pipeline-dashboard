@@ -78,13 +78,15 @@ func OneVersion(url string, fromView bool, matchString string) jenkins_types.Pip
 	preJobData := jenkins_types.Pipeline{URL: urlWithOptions}
 	preJobData.AssignVals()
 
+	var trainData map[int][]jenkins_types.Train
+
 	if fromView {
 		var vjd jenkins_types.ViewsJenkinsData
 		err = json.Unmarshal(body, &vjd)
 		for _, view := range vjd.Views {
 			builds := view.GetBuilds()
 
-			jobTimingData = builds.GetJobData(preJobData.PipelineJob, preJobData.Version)
+			jobTimingData, trainData = builds.GetJobData(preJobData.PipelineJob, preJobData.Version)
 		}
 
 	} else {
@@ -94,10 +96,10 @@ func OneVersion(url string, fromView bool, matchString string) jenkins_types.Pip
 
 		builds := jd.GetBuilds()
 
-		jobTimingData = builds.GetJobData(preJobData.PipelineJob, preJobData.Version)
+		jobTimingData, trainData = builds.GetJobData(preJobData.PipelineJob, preJobData.Version)
 	}
 
-	pipelineData := jenkins_types.Pipeline{JobData: jobTimingData, URL: urlWithOptions}
+	pipelineData := jenkins_types.Pipeline{JobData: jobTimingData, URL: urlWithOptions, TrainData: trainData}
 
 	if err != nil {
 		fmt.Println("error 2:", err)
