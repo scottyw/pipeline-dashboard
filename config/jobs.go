@@ -21,7 +21,11 @@ type Config struct {
 
 func GetConfig() Config {
 
-	tomlData, _ := ioutil.ReadFile("config.toml")
+	tomlData, err := ioutil.ReadFile("config.toml")
+
+	if err != nil {
+		panic(err)
+	}
 
 	var conf Config
 
@@ -29,7 +33,5 @@ func GetConfig() Config {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("%+v", conf)
 	return conf
-
 }
