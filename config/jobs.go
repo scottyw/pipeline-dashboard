@@ -21,7 +21,7 @@ type Config struct {
 
 func GetConfig() Config {
 
-	tomlData, err := ioutil.ReadFile("config.toml")
+	tomlData, err := ioutil.ReadFile("conf/config.toml")
 
 	if err != nil {
 		panic(err)
