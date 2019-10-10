@@ -25,7 +25,7 @@ type Page struct {
 	Products []config.Product
 }
 
-func pageData() *Page {
+func (h *Handlers) PageData() *Page {
 	title := "CI Dashboard"
 
 	csvFile, _ := os.Open("result.csv")
@@ -107,28 +107,30 @@ func pageData() *Page {
 		return trains[i].DurationSortMinutes > trains[j].DurationSortMinutes
 	})
 
-	products := config.GetProducts()
-
-	for i, product := range products {
+	for i, product := range h.Products {
 		product.SetVals(jobs)
-		products[i] = product
+		h.Products[i] = product
 	}
 
-	p := &Page{Title: title, Jobs: jobs, Trains: trains, Products: products}
+	p := &Page{Title: title, Jobs: jobs, Trains: trains, Products: h.Products}
 
 	return p
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	p := pageData()
+func (handlers *Handlers) IndexHandler(w http.ResponseWriter, r *http.Request) {
+	p := handlers.PageData()
 
 	t, _ := template.ParseFiles("templates/index.html")
 	t.Execute(w, p)
 
 }
 
-func productsHandler(w http.ResponseWriter, r *http.Request) {
-	p := pageData()
+type Handlers struct {
+	Products []config.Product
+}
+
+func (handlers *Handlers) ProductsHandler(w http.ResponseWriter, r *http.Request) {
+	p := handlers.PageData()
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -138,6 +140,8 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Serve() {
+	products := config.GetProducts()
+
 	fs := http.FileServer(http.Dir("./public/"))
 	http.Handle("/static/css/", fs)
 	http.Handle("/static/js/", fs)
@@ -146,8 +150,12 @@ func Serve() {
 
 	http.Handle("/", http.FileServer(http.Dir("./public/")))
 
-	http.HandleFunc("/api/1/products", productsHandler)
+	handlers := &Handlers{Products: products}
+
+	http.HandleFunc("/api/1/products", handlers.ProductsHandler)
 
 	// http.HandleFunc("/", handler)
+	fmt.Println("Listening on port :8080")
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
