@@ -9,7 +9,7 @@ mkdir -p public
 cp -R frontend/build/* public/
 
 TIMESTAMP=`date +%s`
-docker build --no-cache . -f Dockerfile -t $1:$TIMESTAMP
-docker push $1:$TIMESTAMP
+docker build --no-cache . -f Dockerfile -t $1:$2
+docker push $1:$2
 
 rm web
