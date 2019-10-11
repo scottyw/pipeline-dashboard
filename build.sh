@@ -8,7 +8,8 @@ cd frontend; yarn build; cd ..
 mkdir -p public
 cp -R frontend/build/* public/
 
-docker build --no-cache . -f Dockerfile -t gcr.io/infracore/ci-dashboard:$(git rev-parse --short HEAD)
-docker push gcr.io/infracore/ci-dashboard:$(git rev-parse --short HEAD)
+TIMESTAMP=`date +%s`
+docker build --no-cache . -f Dockerfile -t $1:$TIMESTAMP
+docker push $1:$TIMESTAMP
 
 rm web

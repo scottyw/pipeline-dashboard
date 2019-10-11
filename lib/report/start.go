@@ -6,12 +6,12 @@ package report
 import (
 	"fmt"
 
-	"github.com/puppetlabs/jenkins_report/config"
-	"github.com/puppetlabs/jenkins_report/lib/report/cith"
-	"github.com/puppetlabs/jenkins_report/lib/report/csv_writers"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
-	"github.com/puppetlabs/jenkins_report/lib/report/runners"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/config"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/cith"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/csv_writers"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/runners"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 	"strings"
 )
 
@@ -34,6 +34,57 @@ func Compile(configData config.Config) []jenkins_types.Pipeline {
 	return allPipelines
 }
 
+func CharactersTheSame(url string, project string) int {
+	maxSame := 0
+	currSame := 0
+
+	for u, _ := range url {
+		for i := 0; i <= len(project)-1; i++ {
+			if u+i >= len(url) {
+				continue
+			}
+			if url[u+i] == project[i] {
+				currSame = currSame + 1
+			} else {
+				currSame = 0
+			}
+			if maxSame < currSame {
+				maxSame = currSame
+			}
+		}
+	}
+
+	return maxSame
+}
+
+func ClosestMatch(failure cith.CithFailure, pipelines []jenkins_types.Pipeline) string {
+	charsMatched := 0
+	var matchedJob jenkins_types.Train
+
+	for _, pipeline := range pipelines {
+		for _, jobs := range pipeline.TrainData {
+			for _, job := range jobs {
+
+				tmpChars := CharactersTheSame(job.URL, failure.ProjectName)
+				if tmpChars > charsMatched {
+					charsMatched = tmpChars
+					matchedJob = job
+				}
+			}
+		}
+	}
+
+	return fmt.Sprintf("Because %d character matched: %+v\n\n", charsMatched, matchedJob)
+}
+
+func URLEncodedContains(url string, testVal string) bool {
+	if strings.Contains(url, "%252C") {
+		url = strings.ReplaceAll(url, "%252C", "%2C")
+	}
+
+	return strings.Contains(url, testVal)
+}
+
 func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailure) []jenkins_types.Pipeline {
 	var retVal []jenkins_types.Pipeline
 
@@ -53,19 +104,29 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 	for _, pipeline := range pipelines {
 		fmt.Println("=============== A Pipeline =============")
 
-		for _, jobs := range pipeline.TrainData {
+		for ji, jobs := range pipeline.TrainData {
 			fmt.Printf("# of Jobs: %d\n", len(jobs))
-			for _, job := range jobs {
+			for jj, job := range jobs {
 				for ci, failure := range cithFailures {
-					if job.BuildNumber == failure.BuildNumber && strings.Contains(job.URL, failure.Master) && strings.Contains(job.URL, failure.ProjectName) {
+
+					if CharactersTheSame(job.URL, failure.ProjectName) > 25 {
+						if URLEncodedContains(job.URL, failure.Master) {
+							fmt.Printf("%s and %s have %d characters the same ", job.URL, failure.ProjectName, CharactersTheSame(job.URL, failure.ProjectName))
+							fmt.Printf("and are the same.\n\n")
+						} else {
+							fmt.Println("\n")
+						}
+					}
+
+					if (job.BuildNumber == failure.BuildNumber || job.BuildNumber-1 == failure.BuildNumber || job.BuildNumber-2 == failure.BuildNumber) && URLEncodedContains(job.URL, failure.Master) && URLEncodedContains(job.URL, failure.ProjectName) {
 						if utils.StringSliceContains(transients, failure.CategoryName) {
 							pipeline.Transients++
-							job.Transients++
-							cith.Remove(cithFailures, ci)
+							pipeline.TrainData[ji][jj].Transients++
+							cithFailures = cith.Remove(cithFailures, ci)
 						} else if utils.StringSliceContains(errors, failure.CategoryName) {
 							pipeline.Errors++
-							job.Errors++
-							cith.Remove(cithFailures, ci)
+							pipeline.TrainData[ji][jj].Errors++
+							cithFailures = cith.Remove(cithFailures, ci)
 						} else {
 							panic(fmt.Sprintf("%s is not a transient or normal error", failure.CategoryName))
 						}
@@ -76,7 +137,25 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 		retVal = append(retVal, pipeline)
 	}
 
+	fmt.Printf("The following %d failures did not have any matches: ", len(cithFailures))
+	for _, failure := range cithFailures {
+		fmt.Printf("FAILURE: %+v\n", failure)
+		fmt.Printf("Closest Match: %s", ClosestMatch(failure, pipelines))
+
+	}
+
+	csv := jenkins_types.OpenTrainCSV()
+
+	for _, pipeline := range pipelines {
+		for _, jobs := range pipeline.TrainData {
+			for _, job := range jobs {
+				jenkins_types.WriteTrainCSV(csv, job, pipeline.PipelineJob, pipeline.Version)
+			}
+		}
+	}
+
 	return retVal
+
 }
 
 func WriteToCSV(pipelines []jenkins_types.Pipeline) {

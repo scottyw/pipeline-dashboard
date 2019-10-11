@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/puppetlabs/jenkins_report/config"
-	"github.com/puppetlabs/jenkins_report/lib/report"
-	"github.com/puppetlabs/jenkins_report/lib/report/cith"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/config"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/cith"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 )
 
 func CithFailures(config config.Config) []cith.CithFailure {

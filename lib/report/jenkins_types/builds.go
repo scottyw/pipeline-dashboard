@@ -2,7 +2,7 @@ package jenkins_types
 
 import (
 	"fmt"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 	"strings"
 	"time"
 )
@@ -193,8 +193,6 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobD
 
 	var jobData JobData
 
-	csv := OpenTrainCSV()
-
 	LogTree(trainData)
 
 	for _, train := range trainData {
@@ -208,7 +206,6 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobD
 		endTime = 0
 
 		for _, t := range train {
-			WriteTrainCSV(csv, t, pipeline_name, pipeline_version)
 			totalMinutes = totalMinutes + t.DurationMinutes
 
 			timeOfEvent := time.Unix(t.Timestamp/1000, 0)

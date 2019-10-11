@@ -7,4 +7,4 @@ Filter the data to figure out what's going on.
 
 # Running
 
-Copy config.example.toml to config.toml and add your Prodcut and Jenkins Job information there.  A "product" is a codebase which may have multiple branches being monitored, with multiple Jenkins Pipelines
+Copy conf/config.example.toml to conf/config.toml and add your Prodcut and Jenkins Job information there.  A "product" is a codebase which may have multiple branches being monitored, with multiple Jenkins Pipelines

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 )
 
 type Train struct {

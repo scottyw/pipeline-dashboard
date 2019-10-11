@@ -14,8 +14,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/puppetlabs/jenkins_report/config"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/config"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 )
 
 type Page struct {
@@ -43,8 +43,8 @@ func (h *Handlers) PageData() *Page {
 
 		buildNumber, _ := strconv.Atoi(line[5])
 
-		transients, _ := strconv.Atoi(line[12])
-		errors, _ := strconv.Atoi(line[13])
+		errors, _ := strconv.Atoi(line[12])
+		transients, _ := strconv.Atoi(line[13])
 
 		jobs = append(jobs, jenkins_types.Pipeline{
 			URL:         line[0],
@@ -61,8 +61,8 @@ func (h *Handlers) PageData() *Page {
 				TotalHours:           line[10],
 				TotalMinutes:         line[11],
 			},
-			Transients: transients,
 			Errors:     errors,
+			Transients: transients,
 		})
 	}
 
@@ -84,8 +84,8 @@ func (h *Handlers) PageData() *Page {
 		hours := minutes / 60
 		minutesLeft := int(minutes) % 60
 
-		transients, _ := strconv.Atoi(line[8])
-		errors, _ := strconv.Atoi(line[9])
+		errors, _ := strconv.Atoi(line[8])
+		transients, _ := strconv.Atoi(line[9])
 
 		trains = append(trains, jenkins_types.TrainStrings{
 			Pipeline:            line[0],
@@ -98,8 +98,8 @@ func (h *Handlers) PageData() *Page {
 			StartTime:           line[5],
 			EndTime:             line[6],
 			Timestamp:           line[7],
-			Transients:          transients,
 			Errors:              errors,
+			Transients:          transients,
 		})
 	}
 

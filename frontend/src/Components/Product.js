@@ -60,9 +60,15 @@ class Product extends Component {
             <div className="col-1">
               {this.props.product.totalTimeDuration}
             </div>
-            <div className="col-2">
+            <div className="col-1">
             </div>
-            <div className="col-2">
+            <div className="col-1">
+            </div>
+            <div className="col-1">
+              {this.props.product.errors}
+            </div>
+            <div className="col-1">
+              {this.props.product.transients}
             </div>
             <div className="col-1">
               <Button href="#" onClick={() => this.togglePipeline()}>{this.state.showPipelines ? 'Close' : 'Pipelines'}</Button>
