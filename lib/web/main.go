@@ -14,8 +14,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/puppetlabs/jenkins_report/config"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/config"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 )
 
 type Page struct {

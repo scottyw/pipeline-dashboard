@@ -2,8 +2,8 @@ package csv_writers
 
 import (
 	"encoding/csv"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 	"os"
 )
 

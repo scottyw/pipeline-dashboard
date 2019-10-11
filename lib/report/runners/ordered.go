@@ -24,8 +24,8 @@ import (
 	"encoding/json"
 
 	"fmt"
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 	"strings"
 )
 

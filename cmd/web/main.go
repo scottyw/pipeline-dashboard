@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/puppetlabs/jenkins_report/lib/web"
+	"github.com/puppetlabs/pipeline-dashboard/lib/web"
 )
 
 func main() {

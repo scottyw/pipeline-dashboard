@@ -4,4 +4,4 @@ set -e
 
 go run main.go
 
-./build.sh
+./build.sh $1

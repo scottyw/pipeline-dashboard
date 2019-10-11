@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/puppetlabs/jenkins_report/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 )
 
 type Product struct {
@@ -18,6 +18,8 @@ type Product struct {
 	WallClockTimeMinutes int
 	TotalTimeMinutes     int
 	TotalTimeDuration    string
+	Errors               int
+	Transients           int
 }
 
 func GetProducts() []Product {
@@ -33,6 +35,8 @@ func (p *Product) SetVals(jobs []jenkins_types.Pipeline) {
 	p.EndTime = time.Now().AddDate(0, 0, -365)
 
 	p.TotalTimeMinutes = 0
+	p.Errors = 0
+	p.Transients = 0
 
 	for _, job := range jobs {
 		if job.PipelineJob == p.Pipeline {
@@ -59,6 +63,9 @@ func (p *Product) SetVals(jobs []jenkins_types.Pipeline) {
 
 			totalJobMinutes, _ := strconv.Atoi(job.JobDataStrings.TotalMinutes)
 			totalJobHours, _ := strconv.Atoi(job.JobDataStrings.TotalHours)
+
+			p.Errors = p.Errors + job.Errors
+			p.Transients = p.Transients + job.Transients
 
 			p.TotalTimeMinutes = p.TotalTimeMinutes + totalJobMinutes + totalJobHours*60
 		}

@@ -2,7 +2,7 @@ package jenkins_types
 
 import (
 	"fmt"
-	"github.com/puppetlabs/jenkins_report/lib/report/utils"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 	"strings"
 	"time"
 )
