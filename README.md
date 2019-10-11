@@ -1,9 +1,6 @@
-Scraping is painful to find the relationships between jobs.
+# Pipeline Dashboard
 
-It would be much easier with a Jenkins Plugin.
-  * Run Historian?
-
-Filter the data to figure out what's going on.
+The pipeline dashboard is a tool for measuring the length of time that Jenkins builds with deep dependencies take to run, and then number of errors in those jobs.
 
 # Running
 

@@ -114,7 +114,8 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 							fmt.Printf("%s and %s have %d characters the same ", job.URL, failure.ProjectName, CharactersTheSame(job.URL, failure.ProjectName))
 							fmt.Printf("and are the same.\n\n")
 						} else {
-							fmt.Println("\n")
+							fmt.Println("")
+							fmt.Println("")
 						}
 					}
 
