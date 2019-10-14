@@ -12,11 +12,21 @@ type JobDefinition struct {
 	Version string
 }
 
+type ProductConfig struct {
+	Name     string
+	Pipeline string
+}
+
 type Config struct {
+	UseCache    bool
 	CithURL     string          `toml:"cith_url"`
-	Products    []Product       `toml:"products"`
+	Products    []ProductConfig `toml:"products"`
 	KickoffJobs []JobDefinition `toml:"kickoff_jobs"`
 	OrderedJobs []JobDefinition `toml:"ordered_jobs"`
+}
+
+func (c *Config) SetUseCache(val bool) {
+	c.UseCache = false
 }
 
 func GetConfig() Config {
@@ -32,6 +42,8 @@ func GetConfig() Config {
 	if _, err := toml.Decode(string(tomlData), &conf); err != nil {
 		fmt.Println(err)
 	}
+
+	conf.UseCache = true
 
 	return conf
 }

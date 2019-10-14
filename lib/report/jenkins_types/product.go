@@ -1,11 +1,11 @@
-package config
+package jenkins_types
 
 import (
 	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
+	"github.com/puppetlabs/pipeline-dashboard/config"
 )
 
 type Product struct {
@@ -23,11 +23,20 @@ type Product struct {
 }
 
 func GetProducts() []Product {
-	configData := GetConfig()
-	return configData.Products
+	configData := config.GetConfig()
+
+	var retVal []Product
+	for _, product := range configData.Products {
+		retVal = append(retVal, Product{
+			Name:     product.Name,
+			Pipeline: product.Pipeline,
+		})
+	}
+
+	return retVal
 }
 
-func (p *Product) SetVals(jobs []jenkins_types.Pipeline) {
+func (p *Product) SetVals(jobs []Pipeline) {
 	timeFormat := "2006-01-02 15:04:05 -0700 MST"
 	// 2019-09-06 10:45:32 -0700 PDT
 

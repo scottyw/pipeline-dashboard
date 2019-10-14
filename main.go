@@ -21,15 +21,23 @@ func CithFailures(config config.Config) []cith.CithFailure {
 	}
 
 	g := utils.Getable{
-		URL: "CITHFAILURES",
+		URL:    "CITHFAILURES",
+		Config: config,
 	}
 
 	client := g.GetRedisClient()
-	defer client.Close()
-	fmt.Println("Checking to see if CITHFAILURES are cached")
 
-	cached, body := g.Cached(client, "CITHFAILURES")
-	json.Unmarshal(body, &cithFailures)
+	var cached bool
+	if client != nil {
+		defer client.Close()
+		fmt.Println("Checking to see if CITHFAILURES are cached")
+
+		var body []byte
+		cached, body = g.Cached(client, "CITHFAILURES")
+		json.Unmarshal(body, &cithFailures)
+	} else {
+		cached = false
+	}
 
 	if cached {
 		fmt.Println("CITHFAILURES are cached")
@@ -51,6 +59,7 @@ func CithFailures(config config.Config) []cith.CithFailure {
 	}
 
 	fmt.Println("Caching Cith Failures")
+
 	g.Cache(client, "CITHFAILURES", body)
 
 	return cithFailures
@@ -60,17 +69,21 @@ func JenkinsData(config config.Config) []jenkins_types.Pipeline {
 	var allJenkinsData []jenkins_types.Pipeline
 
 	g := utils.Getable{
-		URL: "ALLJENKINSDATA",
+		URL:    "ALLJENKINSDATA",
+		Config: config,
 	}
 
 	client := g.GetRedisClient()
-	defer client.Close()
 
-	cached, body := g.Cached(client, "ALLJENKINSDATA")
-	json.Unmarshal(body, &allJenkinsData)
+	if client != nil {
+		defer client.Close()
 
-	if cached {
-		return allJenkinsData
+		cached, body := g.Cached(client, "ALLJENKINSDATA")
+		json.Unmarshal(body, &allJenkinsData)
+
+		if cached {
+			return allJenkinsData
+		}
 	}
 
 	allJenkinsData = report.Compile(config)
@@ -106,13 +119,17 @@ func main() {
 	file_a.Close()
 	file_b.Close()
 
-	config := config.GetConfig()
+	runConfig := config.GetConfig()
 
-	cithFailures := CithFailures(config)
-	jenkinsData := JenkinsData(config)
+	if os.Args[1] == "--no-cache" {
+		runConfig.SetUseCache(false)
+	}
+
+	cithFailures := CithFailures(runConfig)
+	jenkinsData := JenkinsData(runConfig)
 
 	var compiledData []jenkins_types.Pipeline
-	if len(config.CithURL) > 0 {
+	if len(runConfig.CithURL) > 0 {
 		compiledData = report.ApplyCith(jenkinsData, cithFailures)
 	} else {
 		compiledData = jenkinsData

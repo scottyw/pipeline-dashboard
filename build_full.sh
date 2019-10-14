@@ -2,6 +2,7 @@
 
 set -e
 
-go run main.go
+go get
+go run main.go --no-cache
 
-./build.sh $1
+./build.sh $1 $2

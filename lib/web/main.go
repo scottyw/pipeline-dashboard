@@ -14,7 +14,6 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/puppetlabs/pipeline-dashboard/config"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 )
 
@@ -22,7 +21,7 @@ type Page struct {
 	Title    string
 	Jobs     []jenkins_types.Pipeline
 	Trains   []jenkins_types.TrainStrings
-	Products []config.Product
+	Products []jenkins_types.Product
 }
 
 func (h *Handlers) PageData() *Page {
@@ -126,7 +125,7 @@ func (handlers *Handlers) IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type Handlers struct {
-	Products []config.Product
+	Products []jenkins_types.Product
 }
 
 func (handlers *Handlers) ProductsHandler(w http.ResponseWriter, r *http.Request) {
@@ -140,7 +139,7 @@ func (handlers *Handlers) ProductsHandler(w http.ResponseWriter, r *http.Request
 }
 
 func Serve() {
-	products := config.GetProducts()
+	products := jenkins_types.GetProducts()
 
 	fs := http.FileServer(http.Dir("./public/"))
 	http.Handle("/static/css/", fs)

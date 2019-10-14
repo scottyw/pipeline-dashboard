@@ -119,5 +119,8 @@ func GetPrevalentFailureCauses(CithURL string) []CithFailure {
 
 func Remove(slice []CithFailure, s int) []CithFailure {
 	fmt.Printf("Removing slice at location %d\n", s)
-	return append(slice[:s], slice[s+1:]...)
+	if s+1 <= len(slice) {
+		return append(slice[:s], slice[s+1:]...)
+	}
+	return slice[:s]
 }
