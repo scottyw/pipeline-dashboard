@@ -1,7 +1,9 @@
 #!/bin/bash
 
 set -e
-env GOOS=linux go build -o web cmd/web/main.go
+
+echo "Running Go Build"
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o web cmd/web/main.go
 
 cd frontend; yarn build; cd ..
 
