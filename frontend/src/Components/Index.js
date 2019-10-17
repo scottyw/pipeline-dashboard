@@ -5,8 +5,6 @@ import Product from './Product';
 
 import { OverlayTrigger } from 'react-bootstrap';
 
-import Timeline from './Timeline';
-
 const renderWallClockTimeTooltip = props => (
   <div
     {...props}
@@ -68,7 +66,9 @@ class Index extends Component {
     }
 
     return (
-      <div className="container">
+      <div>
+        <br />
+        <h1>CI Dashboard</h1>
         <div className="row">
           <div className="col-3">
             <b>Name</b>
@@ -115,8 +115,6 @@ class Index extends Component {
         </div>
 
         {productsTable}
-
-        <Timeline products={this.props.rootStore.dataStore.products}/>
       </div>
     )
   }
