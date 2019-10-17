@@ -69,7 +69,7 @@ class Timeline extends Component {
           </div>
           <Chart
             width={'100%'}
-            height={'500px'}
+            height={'1024px'}
             chartType="Timeline"
             loader={<div>Loading Chart</div>}
             data={data}
