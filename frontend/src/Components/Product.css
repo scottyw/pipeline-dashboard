@@ -16,3 +16,7 @@
 .train_row {
   background-color: #fff;
 }
+
+.padded-row {
+  padding: 2em 0em;
+}

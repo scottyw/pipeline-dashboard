@@ -5,6 +5,8 @@ import Product from './Product';
 
 import { OverlayTrigger } from 'react-bootstrap';
 
+import Timeline from './Timeline';
+
 const renderWallClockTimeTooltip = props => (
   <div
     {...props}
@@ -83,16 +85,16 @@ class Index extends Component {
         delay={{ show: 250, hide: 400 }}
         overlay={renderWallClockTimeTooltip}
       >
-            <span><b>Wall Clock Time</b><i class="fas fa-info-circle"></i></span>
+            <span><b>Wall Clock Time</b><i className="fas fa-info-circle"></i></span>
             </OverlayTrigger>
           </div>
           <div className="col-1">
           <OverlayTrigger
-  placement="right-start"
-  delay={{ show: 250, hide: 400 }}
-  overlay={renderTotalTimeTooltip}
+            placement="right-start"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTotalTimeTooltip}
 >
-            <span><b>Total Time</b><i class="fas fa-info-circle"></i></span>
+            <span><b>Total Time</b><i className="fas fa-info-circle"></i></span>
             </OverlayTrigger>
           </div>
           <div className="col-1">
@@ -113,6 +115,8 @@ class Index extends Component {
         </div>
 
         {productsTable}
+
+        <Timeline products={this.props.rootStore.dataStore.products}/>
       </div>
     )
   }
