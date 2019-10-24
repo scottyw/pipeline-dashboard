@@ -121,7 +121,7 @@ func (j *Job) AllJobs(buildWhichMatchesParent Build) ([]Job, []Build) {
 }
 
 func (j *Job) Fetch() Job {
-	urlWithFilter := fmt.Sprintf(j.URL + j.filter())
+	urlWithFilter := j.URL + j.filter()
 
 	body := j.Get(urlWithFilter)
 

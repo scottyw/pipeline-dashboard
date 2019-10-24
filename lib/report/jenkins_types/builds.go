@@ -26,6 +26,11 @@ func ProcessTopLevelBuilds(jd BuildsAndJobs) Builds {
 			continue
 		}
 
+		if jobForBuild.URL == "" {
+			fmt.Println("There was no URL associated with this build.")
+			continue
+		}
+
 		jobForBuild.Fetch()
 		build.Fetch()
 

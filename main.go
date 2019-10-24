@@ -121,8 +121,10 @@ func main() {
 
 	runConfig := config.GetConfig()
 
-	if os.Args[1] == "--no-cache" {
-		runConfig.SetUseCache(false)
+	if len(os.Args) > 1 {
+		if os.Args[1] == "--no-cache" {
+			runConfig.SetUseCache(false)
+		}
 	}
 
 	cithFailures := CithFailures(runConfig)

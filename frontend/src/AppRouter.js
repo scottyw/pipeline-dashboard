@@ -29,7 +29,7 @@ class AppRouter extends React.Component {
 
     return (
       <Router>
-      <div style={{ float: 'left', position: 'relative', height: '800px' }}>
+      <div style={{ float: 'left', position: 'relative', height: '100%' }}>
         <Sidebar>
           <Sidebar.Header
             logo="CI Dashboard"
