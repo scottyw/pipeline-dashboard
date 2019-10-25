@@ -8,6 +8,12 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.app-main-content {
+  flex: 1;
+  overflow: auto;
+  padding: 40px;
+  background-color: #f5f8fa;
 }

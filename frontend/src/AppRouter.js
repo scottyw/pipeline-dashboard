@@ -29,7 +29,7 @@ class AppRouter extends React.Component {
 
     return (
       <Router>
-      <div style={{ float: 'left', position: 'relative', height: '100%' }}>
+      <div style={{ float: 'left', position: 'relative', height: '100vh' }}>
         <Sidebar>
           <Sidebar.Header
             logo="CI Dashboard"
@@ -46,7 +46,7 @@ class AppRouter extends React.Component {
 
         </Sidebar>
         </div>
-        <div style={{ position: 'relative', height: '800px' }} className="container">
+        <div style={{ position: 'relative', height: '100vh' }} className="app-main-content">
         <Content>
           <Route path="/" exact component={Index} />
           <Route path="/timeline" exact component={Timeline} />
