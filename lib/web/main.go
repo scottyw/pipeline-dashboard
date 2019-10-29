@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 )
 
@@ -24,7 +25,7 @@ type Page struct {
 	Products []jenkins_types.Product
 }
 
-func (h *Handlers) PageData() *Page {
+func (h *Handlers) GeneratePageData() *Page {
 	title := "CI Dashboard"
 
 	csvFile, _ := os.Open("result.csv")
@@ -111,47 +112,46 @@ func (h *Handlers) PageData() *Page {
 		h.Products[i] = product
 	}
 
-	p := &Page{Title: title, Jobs: jobs, Trains: trains, Products: h.Products}
+	h.Page = &Page{Title: title, Jobs: jobs, Trains: trains, Products: h.Products}
 
-	return p
+	return h.Page
 }
 
 func (handlers *Handlers) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	p := handlers.PageData()
-
 	t, _ := template.ParseFiles("templates/index.html")
-	t.Execute(w, p)
+	t.Execute(w, handlers.Page)
 
 }
 
 type Handlers struct {
 	Products []jenkins_types.Product
+	Page     *Page
 }
 
 func (handlers *Handlers) ProductsHandler(w http.ResponseWriter, r *http.Request) {
-	p := handlers.PageData()
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	json.NewEncoder(w).Encode(p)
-
+	json.NewEncoder(w).Encode(handlers.Page)
 }
 
 func Serve() {
+
 	products := jenkins_types.GetProducts()
 
 	fs := http.FileServer(http.Dir("./public/"))
+
+	handlers := &Handlers{Products: products}
+	handlers.GeneratePageData()
+
 	http.Handle("/static/css/", fs)
 	http.Handle("/static/js/", fs)
-
 	http.Handle("/css/", http.FileServer(http.Dir("./public/")))
 
 	http.Handle("/", http.FileServer(http.Dir("./public/")))
-
-	handlers := &Handlers{Products: products}
-
 	http.HandleFunc("/api/1/products", handlers.ProductsHandler)
+
+	http.Handle("/metrics", handlers.GenerateMetrics(promhttp.Handler()))
 
 	// http.HandleFunc("/", handler)
 	fmt.Println("Listening on port :8080")
