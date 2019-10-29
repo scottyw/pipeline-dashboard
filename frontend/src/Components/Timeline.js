@@ -18,15 +18,12 @@ class Timeline extends Component {
     this.changeDays = this.changeDays.bind(this);
   }
 
-  componentWillMount() {
-    var _this = this;
-    this.props.rootStore.dataStore.fetchProducts(function() {
-      console.log(_this.props.rootStore.dataStore.products);
+  static getDerivedStateFromProps(props, state) {
+    props.rootStore.dataStore.fetchProducts(function() {
     });
   }
 
   changeDays(ev) {
-    console.log(ev.target.value);
     this.setState({
       days: ev.target.value,
     })
@@ -41,8 +38,6 @@ class Timeline extends Component {
       ],
     ];
 
-    console.log(this.props.rootStore.dataStore.products);
-
     this.props.rootStore.dataStore.products.forEach((product, index) => {
       return product.GetPipelines().map((value, index) => {
         if (value.startTime > (new Date()).getTime() - (3600 * 1000 * 24) * this.state.days) {
@@ -54,8 +49,6 @@ class Timeline extends Component {
       });
 
     });
-
-    console.log(data);
 
     return (
       <div>

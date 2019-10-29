@@ -25,7 +25,7 @@ class PipelineTrain extends Component {
     return (
       <div className="row train-row text-left">
         <div className="col-12">
-          <a href={this.props.train.url} target="_blank" rel="noopener noreferrer"><b>{this.props.train.name}</b></a>
+          <a className="train-name" href={this.props.train.url} target="_blank" rel="noopener noreferrer">{this.props.train.name}</a>
         </div>
         <div className="col-5">
         </div>
@@ -33,16 +33,13 @@ class PipelineTrain extends Component {
           {this.props.train.durationFormatted()}
         </div>
         <div className="col-1">
-          <Moment format="YYYY/MM/DD HH:mm">{this.props.train.startTime}</Moment>
+          <Moment parse="YYYY-MM-DD HH:mm:ss Z PDT" format="YYYY/MM/DD HH:mm">{this.props.train.startTime}</Moment>
         </div>
         <div className="col-1">
-          <Moment format="YYYY/MM/DD HH:mm">{this.props.train.endTime}</Moment>
+          <Moment parse="YYYY-MM-DD HH:mm:ss Z PDT" format="YYYY/MM/DD HH:mm">{this.props.train.endTime}</Moment>
         </div>
         <div className="col-1">
-          {this.props.train.errors}
-        </div>
-        <div className="col-1">
-          {this.props.train.transients}
+          {this.props.train.errors} / {this.props.train.transients}
         </div>
       </div>
     )

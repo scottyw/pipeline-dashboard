@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
-import { Button } from '@puppet/react-components';
+import { Link } from '@puppet/react-components';
 
 import PipelineTrain from './PipelineTrain';
 import Moment from 'react-moment';
@@ -50,36 +50,33 @@ class Product extends Component {
       <div className="row text-left">
         <div className="col-12">
           <div className="row pipeline-row">
-            <div className="col-3">
+            <div className="rc-table-cell col-3">
               <a href={this.props.pipeline.url} target="_blank" rel="noopener noreferrer">{this.props.pipeline.pipeline}</a>
 
             </div>
-            <div className="col-1 text-left">
+            <div className="rc-table-cell col-1 text-left">
               {this.props.pipeline.buildNumber}
             </div>
-            <div className="col-1 text-left">
+            <div className="rc-table-cell col-1 text-left">
               {this.props.pipeline.version}
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-2">
               {this.props.pipeline.wallClockFormatted()}
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
               {this.props.pipeline.totalFormatted()}
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
               <Moment format="YYYY/MM/DD HH:mm">{this.props.pipeline.startTime}</Moment>
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
               <Moment format="MM/DD HH:mm">{this.props.pipeline.endTime}</Moment>
             </div>
-            <div className="col-1">
-              {this.props.pipeline.errors}
+            <div className="rc-table-cell col-1">
+              {this.props.pipeline.errors} / {this.props.pipeline.transients}
             </div>
-            <div className="col-1">
-              {this.props.pipeline.transients}
-            </div>
-            <div className="col-1">
-              <Button href="#" onClick={() => this.toggleTrain()}>{this.state.showTrains ? 'Close' : 'Jobs'}</Button>
+            <div className="rc-table-cell col-1">
+              <Link href="#" onClick={() => this.toggleTrain()}>{this.state.showTrains ? 'Close' : 'Jobs'}</Link>
             </div>
           </div>
         <div className="surround-trains"  >

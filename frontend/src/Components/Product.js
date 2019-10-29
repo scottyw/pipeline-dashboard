@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
-import { Button } from '@puppet/react-components';
+import { Link } from '@puppet/react-components';
 
 import ProductPipeline from './ProductPipeline';
 import './Product.css';
@@ -47,31 +47,27 @@ class Product extends Component {
   }
 
   render () {
-    console.log(this.props.product);
     return (
-      <div className="row text-left">
+      <div className="text-left rc-table-row">
         <div className="col-12">
-          <div className="row product-row">
-            <div className="col-5">
+          <div className="row product-row rc-table-row">
+            <div className="rc-table-cell col-5">
               <b>{this.props.product.name}</b>
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-2">
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
               {this.props.product.totalTimeDuration}
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
             </div>
-            <div className="col-1">
+            <div className="rc-table-cell col-1">
             </div>
-            <div className="col-1">
-              {this.props.product.errors}
+            <div className="rc-table-cell col-1">
+              {this.props.product.errors} / {this.props.product.transients}
             </div>
-            <div className="col-1">
-              {this.props.product.transients}
-            </div>
-            <div className="col-1">
-              <Button href="#" onClick={() => this.togglePipeline()}>{this.state.showPipelines ? 'Close' : 'Pipelines'}</Button>
+            <div className="rc-table-cell col-1">
+              <Link href="#" onClick={() => this.togglePipeline()}>{this.state.showPipelines ? 'Close' : 'Pipelines'}</Link>
             </div>
           </div>
           <div className="surround-pipelines"  >

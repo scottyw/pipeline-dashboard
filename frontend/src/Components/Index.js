@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react'
 import Product from './Product';
 
 import { OverlayTrigger } from 'react-bootstrap';
+import { Icon } from '@puppet/react-components';
 
 const renderWallClockTimeTooltip = props => (
   <div
@@ -42,19 +43,13 @@ const renderTotalTimeTooltip = props => (
 class Index extends Component {
   static isPrivate = true
 
-  componentWillMount() {
-    var _this = this;
-    this.props.rootStore.dataStore.fetchProducts(function() {
-      console.log(_this.props.rootStore.dataStore.products);
+  static getDerivedStateFromProps(props, state) {
+    props.rootStore.dataStore.fetchProducts(function() {
     });
   }
 
   render () {
-    const { username } = this.props
-    console.log(username)
-
     var productsTable = [];
-    console.log(this.props.rootStore.dataStore.products)
 
     if (this.props.rootStore.dataStore.products) {
       this.props.rootStore.dataStore.products.forEach((product, index) => {
@@ -69,52 +64,50 @@ class Index extends Component {
       <div>
         <br />
         <h1>CI Dashboard</h1>
-        <div className="row">
-          <div className="col-3">
+        <div className="row rc-table-header ">
+          <div className="rc-table-header-cell col-3">
             <b>Name</b>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
             <b>Build Number</b>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
             <b>Version</b>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-2">
                 <OverlayTrigger
         placement="right-start"
         delay={{ show: 250, hide: 400 }}
         overlay={renderWallClockTimeTooltip}
       >
-            <span><b>Wall Clock Time</b><i className="fas fa-info-circle"></i></span>
+            <span><b>Wall Clock Time</b><Icon type="info-circle"></Icon></span>
             </OverlayTrigger>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
           <OverlayTrigger
             placement="right-start"
             delay={{ show: 250, hide: 400 }}
             overlay={renderTotalTimeTooltip}
->
-            <span><b>Total Time</b><i className="fas fa-info-circle"></i></span>
+          >
+            <span><b>Total Time</b><Icon type="info-circle"></Icon></span>
             </OverlayTrigger>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
             <b>Start Time</b>
           </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
             <b>End Time</b>
           </div>
-          <div className="col-1">
-            <b>Errors</b>
+          <div className="rc-table-header-cell col-1">
+            <b>Errors / Transients</b>
           </div>
-          <div className="col-1">
-            <b>Transients</b>
-          </div>
-          <div className="col-1">
+          <div className="rc-table-header-cell col-1">
             <b>Detail</b>
           </div>
         </div>
-
-        {productsTable}
+        <div className="rc-table">
+          {productsTable}
+        </div>
       </div>
     )
   }

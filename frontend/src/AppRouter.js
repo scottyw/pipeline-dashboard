@@ -34,7 +34,7 @@ class AppRouter extends React.Component {
           <Sidebar.Header
             logo="CI Dashboard"
             onClick={() => console.log('logo clicked')}
-            ariaLabel="Return to the home page"
+            aria-label="Return to the home page"
           />
           <br />
           <Sidebar.Section>

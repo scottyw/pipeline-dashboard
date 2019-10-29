@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import Train from './train';
 
 const axios = require('axios');
-
+const moment = require('moment');
 
 class Product {
   name: ""
@@ -15,7 +15,6 @@ class Product {
   allJobs: []
 
   constructor(product, jobs) {
-    console.log(product);
     this.name = product.Name;
     this.pipeline = product.Pipeline;
     this.startTime = product.StartTime;
@@ -31,8 +30,6 @@ class Product {
     retVal = this.allJobs.filter((job) => {
       return (this.pipeline === job.pipelineJob);
     });
-
-    console.log(retVal);
 
     return retVal;
   }
@@ -54,7 +51,6 @@ class Job {
   buildNumber: 0
 
   constructor(job, trains) {
-    console.log(job);
     this.url = job.URL;
     this.pipeline = job.Pipeline;
     this.pipelineJob = job.PipelineJob;
@@ -63,8 +59,8 @@ class Job {
     this.version = job.Version;
     this.jobDataStrings = job.JobDataStrings;
     this.buildNumber = job.BuildNumber;
-    this.startTime = Date.parse(job.JobDataStrings.StartTime);
-    this.endTime = Date.parse(job.JobDataStrings.EndTime);
+    this.startTime = moment(job.JobDataStrings.StartTime, "YYYY-MM-DD HH:mm:ss Z PDT");
+    this.endTime = moment(job.JobDataStrings.EndTime, "YYYY-MM-DD HH:mm:ss Z PDT");
     this.errors = job.Errors;
     this.transients = job.Transients;
     this.allTrains = trains;
