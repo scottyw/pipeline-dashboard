@@ -43,11 +43,6 @@ const renderTotalTimeTooltip = props => (
 class Index extends Component {
   static isPrivate = true
 
-  static getDerivedStateFromProps(props, state) {
-    props.rootStore.dataStore.fetchProducts(function() {
-    });
-  }
-
   render () {
     var productsTable = [];
 

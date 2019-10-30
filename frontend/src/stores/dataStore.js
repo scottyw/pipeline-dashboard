@@ -28,7 +28,7 @@ class Product {
   GetPipelines() {
     var retVal = [];
     retVal = this.allJobs.filter((job) => {
-      return (this.pipeline === job.pipelineJob);
+      return (this.pipeline === job.pipeline);
     });
 
     return retVal;
@@ -77,7 +77,7 @@ class Job {
   GetTrains() {
     var retVal = [];
     retVal = this.allTrains.filter((train) => {
-      return ((this.pipelineJob === train.pipeline) && (this.version === train.version));
+      return ((this.pipeline === train.pipeline) && (this.version === train.version));
     });
 
     return retVal;

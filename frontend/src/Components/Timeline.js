@@ -18,11 +18,6 @@ class Timeline extends Component {
     this.changeDays = this.changeDays.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    props.rootStore.dataStore.fetchProducts(function() {
-    });
-  }
-
   changeDays(ev) {
     this.setState({
       days: ev.target.value,
@@ -40,9 +35,10 @@ class Timeline extends Component {
 
     this.props.rootStore.dataStore.products.forEach((product, index) => {
       return product.GetPipelines().map((value, index) => {
-        if (value.startTime > (new Date()).getTime() - (3600 * 1000 * 24) * this.state.days) {
+        const sinceDay = ((new Date()).getTime() - (3600 * 24 * 1000 * this.state.days))
+        if (value.startTime > sinceDay) {
           data.push([
-            `${value.pipelineJob} ${value.version}`, value.startTime, value.endTime
+            `${value.pipeline} ${value.version}`, value.startTime, value.endTime
           ]);
         }
         return null;

@@ -13,6 +13,8 @@ import '@puppet/react-components/source/scss/library/ui.scss';
 class RootStore {
   constructor() {
     this.dataStore           = new DataStore(this)
+    this.dataStore.fetchProducts(function() {});
+
   }
 }
 

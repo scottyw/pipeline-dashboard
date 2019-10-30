@@ -48,7 +48,7 @@ func (p *Product) SetVals(jobs []Pipeline) {
 	p.Transients = 0
 
 	for _, job := range jobs {
-		if job.PipelineJob == p.Pipeline {
+		if job.Pipeline == p.Pipeline {
 			jobStartTime, err := time.Parse(timeFormat, job.JobDataStrings.StartTime)
 			if err != nil {
 				fmt.Println(err)
