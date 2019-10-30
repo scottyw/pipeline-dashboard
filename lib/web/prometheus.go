@@ -23,6 +23,7 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 					"pipeline_job": job.PipelineJob,
 					"version":      job.Version,
 					"build_number": strconv.Itoa(job.BuildNumber),
+					"scope":        "pipeline",
 				}).
 				Set(float64((60 * tM) + (3600 * tH)))
 			wallClockSeconds.
@@ -31,6 +32,7 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 					"pipeline_job": job.PipelineJob,
 					"version":      job.Version,
 					"build_number": strconv.Itoa(job.BuildNumber),
+					"scope":        "pipeline",
 				}).
 				Set(float64((60 * wCTM) + (3600 * wCTH)))
 		}
@@ -42,6 +44,7 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 					"pipeline_job": train.Name,
 					"version":      train.Version,
 					"build_number": "0",
+					"scope":        "job",
 				}).
 				Set(float64(train.DurationSortMinutes * 60))
 			wallClockSeconds.
@@ -50,6 +53,7 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 					"pipeline_job": train.Name,
 					"version":      train.Version,
 					"build_number": "0",
+					"scope":        "job",
 				}).
 				Set(float64(train.DurationSortMinutes * 60))
 		}
@@ -62,11 +66,11 @@ var (
 	wallClockSeconds = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "cidashboard_wall_clock_seconds",
 		Help: "The time it has taken for a job or pipeline from start to finish.",
-	}, []string{"pipeline", "pipeline_job", "version", "build_number"},
+	}, []string{"pipeline", "pipeline_job", "version", "build_number", "scope"},
 	)
 	totalSeconds = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "cidashboard_total_seconds",
 		Help: "The consecutive time taken for a job or pipeline",
-	}, []string{"pipeline", "pipeline_job", "version", "build_number"},
+	}, []string{"pipeline", "pipeline_job", "version", "build_number", "scope"},
 	)
 )
