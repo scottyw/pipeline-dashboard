@@ -12,10 +12,10 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
 		for _, job := range handlers.Page.Jobs {
+			tH, _ := strconv.Atoi(job.JobDataStrings.TotalHours)
 			tM, _ := strconv.Atoi(job.JobDataStrings.TotalMinutes)
-			tH, _ := strconv.Atoi(job.JobDataStrings.TotalMinutes)
+			wCTH, _ := strconv.Atoi(job.JobDataStrings.WallClockTimeHours)
 			wCTM, _ := strconv.Atoi(job.JobDataStrings.WallClockTimeMinutes)
-			wCTH, _ := strconv.Atoi(job.JobDataStrings.WallClockTimeMinutes)
 
 			totalSeconds.
 				With(prometheus.Labels{

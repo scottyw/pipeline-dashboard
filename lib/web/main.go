@@ -49,8 +49,8 @@ func (h *Handlers) GeneratePageData() *Page {
 		jobs = append(jobs, jenkins_types.Pipeline{
 			URL:         line[0],
 			Server:      line[1],
-			Pipeline:    line[2],
-			PipelineJob: line[3],
+			Pipeline:    line[3],
+			PipelineJob: line[2],
 			Version:     line[4],
 			BuildNumber: buildNumber,
 			JobDataStrings: &jenkins_types.JobDataStrings{
