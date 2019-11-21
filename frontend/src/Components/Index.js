@@ -71,7 +71,7 @@ class Index extends Component {
           </div>
           <div className="rc-table-header-cell col-2">
                 <OverlayTrigger
-        placement="right-start"
+        placement="bottom"
         delay={{ show: 250, hide: 400 }}
         overlay={renderWallClockTimeTooltip}
       >
@@ -80,7 +80,7 @@ class Index extends Component {
           </div>
           <div className="rc-table-header-cell col-1">
           <OverlayTrigger
-            placement="right-start"
+            placement="bottom"
             delay={{ show: 250, hide: 400 }}
             overlay={renderTotalTimeTooltip}
           >
@@ -103,6 +103,8 @@ class Index extends Component {
         <div className="rc-table">
           {productsTable}
         </div>
+        <a href="https://puppet.grafana.net/d/o5XTdT0Wk/build-time-history-from-ci-dashboard?orgId=1&refresh=1m">Historical Build Times in Grafana</a><br />
+        <a href="https://puppet.grafana.net/d/r8Is0w2Wz/cith-metrics?orgId=1&refresh=5m">Historical Errors in Grafana</a><br />
       </div>
     )
   }

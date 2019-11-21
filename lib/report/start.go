@@ -97,6 +97,7 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 		"Test (Suspected)",
 		"Other",
 		"Product (Suspected)",
+		"Product (Confirmed)",
 	}
 
 	fmt.Printf("# of Failures: %d", len(cithFailures))
