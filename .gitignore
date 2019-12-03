@@ -5,6 +5,6 @@ result.csv
 config.toml
 
 public/*
-web
+./web
 ./main
 frontend/src/data_updated.js

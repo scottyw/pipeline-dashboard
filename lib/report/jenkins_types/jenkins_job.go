@@ -52,24 +52,6 @@ func OrderedJobsAndBuildsFromDownstreamProjects(parentBuild Build, projects []Pr
 			builds = append(builds, allSubBuilds...)
 			fmt.Printf("------ Added build: %s\n", matchingBuild.FullDisplayName)
 			builds = append(builds, matchingBuild)
-			// for _, subJob := range allSubJobs {
-			// 	build := Build{URL: subJob.LastBuild.URL}
-			// 	build.Fetch()
-			// 	fmt.Printf("Build: %s\n", build.FullDisplayName)
-			// 	job.LastBuild.Fetch()
-			//
-			// 	/*
-			// 		TODO: THIS IS WHERE I LEFT OFF, THIS SHOULD START TO WORK NOW AS WE LOOK FOR GO THROUGH THE JOBS ONE BY ONE
-			// 	*/
-			// 	matchesSubJob, matchingBuildForSubJobs := AllBuildsTriggerMatchesParent(subJob, job.LastBuild)
-			//
-			// 	if matchesSubJob {
-			// 		fmt.Printf("Added build: %s\n", matchingBuildForSubJobs.FullDisplayName)
-			// 		builds = append(builds, matchingBuildForSubJobs)
-			// 	} else {
-			// 		fmt.Printf("Didn't add build: %s\n", build.FullDisplayName)
-			// 	}
-			// }
 		} else {
 			fmt.Printf("------ Didn't Add Build: %s\n", matchingBuild.FullDisplayName)
 		}

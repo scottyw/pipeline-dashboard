@@ -170,26 +170,25 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobD
 			}
 
 			i++
-		} else {
-			var train Train
-
-			train.JobName = build.JobName
-			train.BuildNumber = build.Number
-			train.Name = build.FullDisplayName
-			train.URL = build.URL
-			train.DurationMinutes = float32(build.Duration) / (60 * 1000)
-			train.StartTime = time.Unix(build.Timestamp/1000, 0)
-			train.EndTime = train.GetEndTime()
-			train.Timestamp = build.Timestamp
-
-			if len(trainData[i]) > 0 {
-				trainData[i] = append(trainData[i], train)
-			} else {
-				trainData[i] = []Train{train}
-			}
-			i++
-
 		}
+
+		var train Train
+
+		train.JobName = build.JobName
+		train.BuildNumber = build.Number
+		train.Name = build.FullDisplayName
+		train.URL = build.URL
+		train.DurationMinutes = float32(build.Duration) / (60 * 1000)
+		train.StartTime = time.Unix(build.Timestamp/1000, 0)
+		train.EndTime = train.GetEndTime()
+		train.Timestamp = build.Timestamp
+
+		if len(trainData[i]) > 0 {
+			trainData[i] = append(trainData[i], train)
+		} else {
+			trainData[i] = []Train{train}
+		}
+		i++
 
 	}
 

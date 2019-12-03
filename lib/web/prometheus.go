@@ -1,7 +1,10 @@
 package web
 
 import (
+	"fmt"
+
 	"net/http"
+	"regexp"
 	"strconv"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -38,10 +41,15 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 		}
 
 		for _, train := range handlers.Page.Trains {
+			var matchBuildNumber = regexp.MustCompile(` #[0-9]+$`)
+
+			var trainNameWithoutBuildNumber = string(matchBuildNumber.ReplaceAll([]byte(train.Name), []byte("")))
+			fmt.Println(trainNameWithoutBuildNumber)
+
 			totalSeconds.
 				With(prometheus.Labels{
 					"pipeline":     train.Pipeline,
-					"pipeline_job": train.Name,
+					"pipeline_job": trainNameWithoutBuildNumber,
 					"version":      train.Version,
 					"build_number": "0",
 					"scope":        "job",
@@ -50,7 +58,7 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 			wallClockSeconds.
 				With(prometheus.Labels{
 					"pipeline":     train.Pipeline,
-					"pipeline_job": train.Name,
+					"pipeline_job": trainNameWithoutBuildNumber,
 					"version":      train.Version,
 					"build_number": "0",
 					"scope":        "job",
