@@ -17,10 +17,16 @@ type ProductConfig struct {
 	Pipeline string
 }
 
+type LinkConfig struct {
+	URL   string `toml:"url"`
+	Title string `toml:"title"`
+}
+
 type Config struct {
 	UseCache    bool
 	CithURL     string          `toml:"cith_url"`
 	Products    []ProductConfig `toml:"products"`
+	Links       []LinkConfig    `toml:"links"`
 	KickoffJobs []JobDefinition `toml:"kickoff_jobs"`
 	OrderedJobs []JobDefinition `toml:"ordered_jobs"`
 }

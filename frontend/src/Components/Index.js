@@ -103,8 +103,11 @@ class Index extends Component {
         <div className="rc-table">
           {productsTable}
         </div>
-        <a href="https://puppet.grafana.net/d/o5XTdT0Wk/build-time-history-from-ci-dashboard?orgId=1&refresh=1m">Historical Build Times in Grafana</a><br />
-        <a href="https://puppet.grafana.net/d/r8Is0w2Wz/cith-metrics?orgId=1&refresh=5m">Historical Errors in Grafana</a><br />
+        <ul>
+          {this.props.rootStore.dataStore.links.map((link) => {
+            return <li><a href={link.url}>{link.title}</a></li>
+          })}
+        </ul>
       </div>
     )
   }

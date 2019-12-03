@@ -22,6 +22,7 @@ type Page struct {
 	Title    string
 	Jobs     []jenkins_types.Pipeline
 	Trains   []jenkins_types.TrainStrings
+	Links    []jenkins_types.Link
 	Products []jenkins_types.Product
 }
 
@@ -112,7 +113,7 @@ func (h *Handlers) GeneratePageData() *Page {
 		h.Products[i] = product
 	}
 
-	h.Page = &Page{Title: title, Jobs: jobs, Trains: trains, Products: h.Products}
+	h.Page = &Page{Title: title, Jobs: jobs, Trains: trains, Products: h.Products, Links: h.Links}
 
 	return h.Page
 }
@@ -125,6 +126,7 @@ func (handlers *Handlers) IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 type Handlers struct {
 	Products []jenkins_types.Product
+	Links    []jenkins_types.Link
 	Page     *Page
 }
 
@@ -135,13 +137,20 @@ func (handlers *Handlers) ProductsHandler(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(handlers.Page)
 }
 
+func (handlers *Handlers) LinksHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	json.NewEncoder(w).Encode(handlers.Page)
+}
+
 func Serve() {
-
-	products := jenkins_types.GetProducts()
-
 	fs := http.FileServer(http.Dir("./public/"))
 
-	handlers := &Handlers{Products: products}
+	handlers := &Handlers{
+		Products: jenkins_types.GetProducts(),
+		Links:    jenkins_types.GetLinks(),
+	}
 	handlers.GeneratePageData()
 
 	http.Handle("/static/css/", fs)
@@ -150,6 +159,7 @@ func Serve() {
 
 	http.Handle("/", http.FileServer(http.Dir("./public/")))
 	http.HandleFunc("/api/1/products", handlers.ProductsHandler)
+	http.HandleFunc("/api/1/links", handlers.LinksHandler)
 
 	http.Handle("/metrics", handlers.GenerateMetrics(promhttp.Handler()))
 
