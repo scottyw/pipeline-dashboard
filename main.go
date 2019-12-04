@@ -48,8 +48,10 @@ func CithFailures(config config.Config) []cith.CithFailure {
 	cithFailures = report.CompileCith(config.CithURL)
 
 	fmt.Printf("Found %d failures for today from Cith.\n", len(cithFailures))
+
 	if len(cithFailures) == 0 {
-		panic("Found no Cith Failures")
+		fmt.Println("Found no Cith Failures")
+		return cithFailures
 	}
 
 	body, err := json.Marshal(cithFailures)
