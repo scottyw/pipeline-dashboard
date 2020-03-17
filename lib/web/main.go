@@ -121,7 +121,6 @@ func (h *Handlers) GeneratePageData() *Page {
 func (handlers *Handlers) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("templates/index.html")
 	t.Execute(w, handlers.Page)
-
 }
 
 type Handlers struct {
@@ -153,11 +152,13 @@ func Serve() {
 	}
 	handlers.GeneratePageData()
 
-	http.Handle("/static/css/", fs)
-	http.Handle("/static/js/", fs)
+	http.Handle("/", http.FileServer(http.Dir("./public/")))
+
 	http.Handle("/css/", http.FileServer(http.Dir("./public/")))
 
-	http.Handle("/", http.FileServer(http.Dir("./public/")))
+	http.Handle("/static/css/", fs)
+	http.Handle("/static/js/", fs)
+
 	http.HandleFunc("/api/1/products", handlers.ProductsHandler)
 	http.HandleFunc("/api/1/links", handlers.LinksHandler)
 
