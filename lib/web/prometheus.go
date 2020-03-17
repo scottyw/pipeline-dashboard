@@ -66,6 +66,9 @@ func (handlers *Handlers) GenerateMetrics(next http.Handler) http.Handler {
 				Set(float64(train.DurationSortMinutes * 60))
 		}
 
+		timeSinceLastUpdate.
+			With(prometheus.Labels{}).Set(lastUpdated())
+
 		next.ServeHTTP(w, r)
 	})
 }
@@ -80,5 +83,10 @@ var (
 		Name: "cidashboard_total_seconds",
 		Help: "The consecutive time taken for a job or pipeline",
 	}, []string{"pipeline", "pipeline_job", "version", "build_number", "scope"},
+	)
+	timeSinceLastUpdate = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "cidashboard_seconds_since_last_update",
+		Help: "The amount of time that has passed since the last update.",
+	}, []string{},
 	)
 )
