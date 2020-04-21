@@ -6,19 +6,21 @@ package report
 import (
 	"fmt"
 
+	"strings"
+
 	"github.com/puppetlabs/pipeline-dashboard/config"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/cith"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/csv_writers"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/runners"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
-	"strings"
 )
 
 func CompileCith(CithURL string) []cith.CithFailure {
 	return cith.GetPrevalentFailureCauses(CithURL)
 }
 
+// Compile is the entrypoint to the Jenkins Job Compilation.
 func Compile(configData config.Config) []jenkins_types.Pipeline {
 	var allPipelines []jenkins_types.Pipeline
 	// Pass in kickoff job and follow downstreams
@@ -34,29 +36,6 @@ func Compile(configData config.Config) []jenkins_types.Pipeline {
 	return allPipelines
 }
 
-func CharactersTheSame(url string, project string) int {
-	maxSame := 0
-	currSame := 0
-
-	for u, _ := range url {
-		for i := 0; i <= len(project)-1; i++ {
-			if u+i >= len(url) {
-				continue
-			}
-			if url[u+i] == project[i] {
-				currSame = currSame + 1
-			} else {
-				currSame = 0
-			}
-			if maxSame < currSame {
-				maxSame = currSame
-			}
-		}
-	}
-
-	return maxSame
-}
-
 func ClosestMatch(failure cith.CithFailure, pipelines []jenkins_types.Pipeline) string {
 	charsMatched := 0
 	var matchedJob jenkins_types.Train
@@ -65,7 +44,7 @@ func ClosestMatch(failure cith.CithFailure, pipelines []jenkins_types.Pipeline) 
 		for _, jobs := range pipeline.TrainData {
 			for _, job := range jobs {
 
-				tmpChars := CharactersTheSame(job.URL, failure.ProjectName)
+				tmpChars := utils.CharactersTheSame(job.URL, failure.ProjectName)
 				if tmpChars > charsMatched {
 					charsMatched = tmpChars
 					matchedJob = job
@@ -110,9 +89,9 @@ func ApplyCith(pipelines []jenkins_types.Pipeline, cithFailures []cith.CithFailu
 			for jj, job := range jobs {
 				for ci, failure := range cithFailures {
 
-					if CharactersTheSame(job.URL, failure.ProjectName) > 25 {
+					if utils.CharactersTheSame(job.URL, failure.ProjectName) > 25 {
 						if URLEncodedContains(job.URL, failure.Master) {
-							fmt.Printf("%s and %s have %d characters the same ", job.URL, failure.ProjectName, CharactersTheSame(job.URL, failure.ProjectName))
+							fmt.Printf("%s and %s have %d characters the same ", job.URL, failure.ProjectName, utils.CharactersTheSame(job.URL, failure.ProjectName))
 							fmt.Printf("and are the same.\n\n")
 						} else {
 							fmt.Println("")

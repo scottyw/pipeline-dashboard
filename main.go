@@ -11,6 +11,8 @@ import (
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/cith"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 func CithFailures(config config.Config) []cith.CithFailure {
@@ -103,10 +105,10 @@ func JenkinsData(config config.Config) []jenkins_types.Pipeline {
 
 func main() {
 
-	file_a, _ := os.Create("result.csv")
-	file_b, _ := os.Create("trains.csv")
+	fileA, _ := os.Create("result.csv")
+	fileB, _ := os.Create("trains.csv")
 
-	writer := csv.NewWriter(file_b)
+	writer := csv.NewWriter(fileB)
 
 	writer.Write([]string{
 		"URL",
@@ -114,20 +116,22 @@ func main() {
 		"ProjectVersion",
 		"Name",
 		"DurationMinutes",
+		"QueueTimeMinutes",
 		"Time",
 		"TimeStamp",
 	})
 
-	file_a.Close()
-	file_b.Close()
+	fileA.Close()
+	fileB.Close()
 
 	runConfig := config.GetConfig()
 
-	if len(os.Args) > 1 {
-		if os.Args[1] == "--no-cache" {
-			runConfig.SetUseCache(false)
-		}
-	}
+	pflag.Bool("hidetreelog", false, "Whether or not to hide the long tree log")
+	pflag.Bool("no-cache", true, "Whether or not to use a cache")
+	pflag.Parse()
+	viper.BindPFlags(pflag.CommandLine)
+
+	runConfig.SetUseCache(viper.GetBool("no-cache"))
 
 	cithFailures := CithFailures(runConfig)
 	jenkinsData := JenkinsData(runConfig)

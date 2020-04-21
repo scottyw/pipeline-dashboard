@@ -2,6 +2,8 @@ package utils
 
 import (
 	"fmt"
+
+	"github.com/spf13/viper"
 )
 
 func LogHeading(shown string, hidden string) {
@@ -17,6 +19,12 @@ func Log(shown string, hidden string) {
 }
 
 func LogTree(shown string, hidden string, indent int) {
+	hide := viper.GetBool("hidetreelog") // retrieve values from viper instead of pflag
+
+	if hide {
+		return
+	}
+
 	hidden = "URL"
 
 	for i := 0; i < indent; i++ {

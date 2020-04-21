@@ -3,6 +3,7 @@ package jenkins_types
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 
 	"strings"
@@ -57,7 +58,25 @@ func BuildsFromMatrixRuns(parent Build, projects []Project) []Build {
 }
 
 func (b *Build) filter() string {
-	return "api/json?tree=actions[triggeredBuilds[*],causes[*]],duration,fullDisplayName,name,number,timestamp,url,runs[number,url]&depth=2"
+	waitingStatNames := "blockedDurationMillis,blockedTimeMillis,buildableDurationMillis,buildableTimeMillis,buildingDurationMillis,executingTimeMillis,waitingDurationMillis,waitingTimeMillis"
+	return fmt.Sprintf("api/json?tree=actions[triggeredBuilds[*],causes[*],%s],duration,fullDisplayName,name,number,timestamp,url,runs[number,url]&depth=2", waitingStatNames)
+}
+
+func (b *Build) SetQueueTimes() {
+	// var project string
+	for _, action := range b.Actions {
+		if action.Class == "jenkins.metrics.impl.TimeInQueueAction" {
+
+			b.TimeInQueue.BlockedDurationMillis = action.BlockedDurationMillis
+			b.TimeInQueue.BlockedTimeMillis = action.BlockedTimeMillis
+			b.TimeInQueue.BuildableDurationMillis = action.BuildableDurationMillis
+			b.TimeInQueue.BuildableTimeMillis = action.BuildableTimeMillis
+			b.TimeInQueue.BuildingDurationMillis = action.BuildingDurationMillis
+			b.TimeInQueue.ExecutingTimeMillis = action.ExecutingTimeMillis
+			b.TimeInQueue.WaitingDurationMillis = action.WaitingDurationMillis
+			b.TimeInQueue.WaitingTimeMillis = action.WaitingTimeMillis
+		}
+	}
 }
 
 func (b *Build) TriggeredBy() (string, int) {
@@ -77,15 +96,21 @@ func (b *Build) TriggeredBy() (string, int) {
 	return url, buildNumber
 }
 
+func (b *Build) UnmarshalFetchedBuild(jsonBody []byte) {
+	json.Unmarshal(jsonBody, &b)
+	b.SetQueueTimes()
+}
+
 func (b *Build) Fetch() Build {
 
 	urlWithFilter := fmt.Sprint(b.URL + b.filter())
 
 	if b.URL == "" {
-		fmt.Println("ERROR build.go line 42: b.URL not set")
+		fmt.Println("ERROR jenkins_build.go line 109: b.URL not set")
 	} else {
 		body := b.Get(urlWithFilter)
-		json.Unmarshal(body, &b)
+
+		b.UnmarshalFetchedBuild(body)
 	}
 
 	return *b

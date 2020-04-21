@@ -60,7 +60,10 @@ class Product extends Component {
             <div className="rc-table-cell col-1 text-left">
               {this.props.pipeline.version}
             </div>
-            <div className="rc-table-cell col-2">
+            <div className="rc-table-cell col-1">
+              {this.props.pipeline.queueTimeFormatted()}
+            </div>
+            <div className="rc-table-cell col-1">
               {this.props.pipeline.wallClockFormatted()}
             </div>
             <div className="rc-table-cell col-1">

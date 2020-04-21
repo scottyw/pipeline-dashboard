@@ -43,7 +43,7 @@ const renderTotalTimeTooltip = props => (
 class Index extends Component {
   static isPrivate = true
 
-  render () {
+  render() {
     var productsTable = [];
 
     if (this.props.rootStore.dataStore.products) {
@@ -69,22 +69,31 @@ class Index extends Component {
           <div className="rc-table-header-cell col-1">
             <b>Version</b>
           </div>
-          <div className="rc-table-header-cell col-2">
-                <OverlayTrigger
-        placement="bottom"
-        delay={{ show: 250, hide: 400 }}
-        overlay={renderWallClockTimeTooltip}
-      >
-            <span><b>Wall Clock Time</b><Icon type="info-circle"></Icon></span>
+          <div className="rc-table-header-cell col-1">
+            <OverlayTrigger
+              placement="bottom"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderWallClockTimeTooltip}
+            >
+              <span><b>Queue Time</b><Icon type="info-circle"></Icon></span>
             </OverlayTrigger>
           </div>
           <div className="rc-table-header-cell col-1">
-          <OverlayTrigger
-            placement="bottom"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTotalTimeTooltip}
-          >
-            <span><b>Total Time</b><Icon type="info-circle"></Icon></span>
+            <OverlayTrigger
+              placement="bottom"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderWallClockTimeTooltip}
+            >
+              <span><b>Wall Clock Time</b><Icon type="info-circle"></Icon></span>
+            </OverlayTrigger>
+          </div>
+          <div className="rc-table-header-cell col-1">
+            <OverlayTrigger
+              placement="bottom"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTotalTimeTooltip}
+            >
+              <span><b>Total Time</b><Icon type="info-circle"></Icon></span>
             </OverlayTrigger>
           </div>
           <div className="rc-table-header-cell col-1">
