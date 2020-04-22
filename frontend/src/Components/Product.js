@@ -54,7 +54,10 @@ class Product extends Component {
             <div className="rc-table-cell col-5">
               <b>{this.props.product.name}</b>
             </div>
-            <div className="rc-table-cell col-2">
+            <div className="rc-table-cell col-1">
+              {this.props.product.queueTimeFormatted()}
+            </div>
+            <div className="rc-table-cell col-1">
             </div>
             <div className="rc-table-cell col-1">
               {this.props.product.totalTimeDuration}

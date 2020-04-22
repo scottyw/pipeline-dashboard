@@ -2,9 +2,13 @@ package jenkins_types
 
 import (
 	"fmt"
-	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
+	"os"
 	"strings"
 	"time"
+
+	// "github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/table"
+	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
 )
 
 type Builds struct {
@@ -44,26 +48,6 @@ func ProcessTopLevelBuilds(jd BuildsAndJobs) Builds {
 		build.JobName = jobForBuild.Name
 		retVal.List = append(retVal.List, build)
 		retVal.List = append(retVal.List, buildDownstreamBuilds...)
-		// for n, job := range buildDownstreamJobs {
-		// 	fmt.Printf("!%d", n)
-		// 	lastBuild := job.LastBuild
-		//
-		// 	if strings.Contains(lastBuild.URL, "http") {
-		// 		lastBuild.Fetch()
-		//
-		// 		build.JobName = jobForBuild.Name
-		//
-		// 		if BuildTriggerMatchesParent(lastBuild, build) {
-		// 			retVal.List = append(retVal.List, lastBuild)
-		// 			utils.Log(
-		// 				fmt.Sprintf("Job: %s || Build has number: %d", jobForBuild.Name, build.Number),
-		// 				build.URL,
-		// 			)
-		// 		}
-		// 	} else {
-		// 		continue
-		// 	}
-		// }
 	}
 	return retVal
 }
@@ -108,7 +92,6 @@ func BuildTriggerMatchesParent(child Build, parent Build) bool {
 }
 
 func LogTree(trainData map[int][]Train) {
-
 	utils.LogHeading("Train Tree: ", "")
 	var jobs []string
 	for _, topTrain := range trainData {
@@ -132,62 +115,55 @@ func LogTree(trainData map[int][]Train) {
 	}
 }
 
+func parseBuildToTrain(build Build) (train Train) {
+	train.BuildNumber = build.Number
+	train.DurationMinutes = float32(build.Duration) / (60 * 1000)
+	train.EndTime = train.GetEndTime()
+	train.JobName = build.JobName
+	train.Name = build.FullDisplayName
+	train.QueueTimeMinutes = float32(build.TimeInQueue.QueueTime()) / (60 * 1000)
+	train.StartTime = time.Unix(build.Timestamp/1000, 0)
+	train.Timestamp = build.Timestamp
+	train.URL = build.URL
+
+	return train
+}
+
+func addTrain(trains map[int][]Train, newTrain Train, i int) map[int][]Train {
+	if len(trains[i]) > 0 {
+		trains[i] = append(trains[i], newTrain)
+	} else {
+		trains[i] = []Train{newTrain}
+	}
+
+	return trains
+}
+
+/*
+ * GetJobData gets trains from matrix builds and builds.
+ */
 func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobData, map[int][]Train) {
 	trainData := make(map[int][]Train)
 
 	for _, build := range b.List {
 		build.Fetch()
 		i := 0
-		fmt.Printf("%s\n", build.FullDisplayName)
-		fmt.Printf("%s\n", build.URL)
-		fmt.Printf("Processing Build %s\n\n", build.Class)
 
 		if build.Class == "hudson.matrix.MatrixBuild" {
 			// Here is where we get trains from Matrix Builds
-
 			if len(build.Runs) > 0 {
-
-				for _, cell_build := range BuildsFromMatrixRuns(build, build.Runs) {
-
-					var train Train
-					utils.Log(fmt.Sprintf("Matrix Cell: %s", cell_build.FullDisplayName), cell_build.URL)
-
-					train.JobName = cell_build.JobName
-					train.BuildNumber = cell_build.Number
-					train.URL = cell_build.URL
-					train.Name = cell_build.FullDisplayName
-					train.DurationMinutes = float32(cell_build.Duration) / (60 * 1000)
-					train.StartTime = time.Unix(cell_build.Timestamp/1000, 0)
-					train.EndTime = train.GetEndTime()
-					train.Timestamp = cell_build.Timestamp
-
-					if len(trainData[i]) > 0 {
-						trainData[i] = append(trainData[i], train)
-					} else {
-						trainData[i] = []Train{train}
-					}
+				for _, cellBuild := range BuildsFromMatrixRuns(build, build.Runs) {
+					utils.Log(fmt.Sprintf("Matrix Cell: %s", cellBuild.FullDisplayName), cellBuild.URL)
+					train := parseBuildToTrain(cellBuild)
+					trainData = addTrain(trainData, train, i)
 				}
 			}
 
 			i++
 		}
 
-		var train Train
-
-		train.JobName = build.JobName
-		train.BuildNumber = build.Number
-		train.Name = build.FullDisplayName
-		train.URL = build.URL
-		train.DurationMinutes = float32(build.Duration) / (60 * 1000)
-		train.StartTime = time.Unix(build.Timestamp/1000, 0)
-		train.EndTime = train.GetEndTime()
-		train.Timestamp = build.Timestamp
-
-		if len(trainData[i]) > 0 {
-			trainData[i] = append(trainData[i], train)
-		} else {
-			trainData[i] = []Train{train}
-		}
+		train := parseBuildToTrain(build)
+		trainData = addTrain(trainData, train, i)
 		i++
 
 	}
@@ -196,21 +172,19 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobD
 	utils.LogHeading(fmt.Sprintf("Processing %d Trains\n\n", len(trainData[0])), "")
 
 	var jobData JobData
-
+	fmt.Printf("^^^^^^ &&&&&& ****** Log Tree Train Data ****** &&&&&& ^^^^^^^")
 	LogTree(trainData)
 
+	var totalMinutes float32
+	var queueTimeMinutes float32
+
+	var startTime int64 = 9999999999999
+	var endTime int64
 	for _, train := range trainData {
-		var totalMinutes float32
-		totalMinutes = 0
-
-		var startTime int64
-		var endTime int64
-
-		startTime = 9999999999999
-		endTime = 0
 
 		for _, t := range train {
 			totalMinutes = totalMinutes + t.DurationMinutes
+			queueTimeMinutes = queueTimeMinutes + t.QueueTimeMinutes
 
 			timeOfEvent := time.Unix(t.Timestamp/1000, 0)
 
@@ -232,15 +206,22 @@ func (b *Builds) GetJobData(pipeline_name string, pipeline_version string) (JobD
 			}
 
 		}
-
-		jobData.AssignJobValues(startTime, endTime, totalMinutes)
+		/* Assigning Job Values for Every Train */
+		fmt.Printf("\n\n\n")
+		fmt.Println("Assigning Job Values for Train: ")
+		fmt.Printf("+%v\n", train)
+		fmt.Println("========================================================")
+		fmt.Printf("Job %s/%s has queue time minutes value of %g\n\n", pipeline_name, pipeline_version, queueTimeMinutes)
+		jobData.AssignJobValues(startTime, endTime, totalMinutes, queueTimeMinutes)
 	}
 
-	utils.LogHeading("Pipeline Data", "")
-	utils.Log(fmt.Sprintf("Start Time: %s", jobData.StartTime), "")
-	utils.Log(fmt.Sprintf("End Time: %s", jobData.EndTime), "")
-	utils.Log(fmt.Sprintf("Wall Clock Time Hours: %d", jobData.WallClockTimeHours), "")
-	utils.Log(fmt.Sprintf("Wall Clock Time Minutes: %d", jobData.WallClockTimeMinutes), "")
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"Start Time", "End Time", "Wall Clock Time Hours", "Wall Clock Time Minutes", "Queue Time Hours", "Queue Time Minutes"})
+	t.AppendRows([]table.Row{
+		{jobData.StartTime, jobData.EndTime, jobData.WallClockTimeHours, jobData.WallClockTimeMinutes, jobData.QueueTimeHours, jobData.QueueTimeMinutes},
+	})
+	t.Render()
 
 	return jobData, trainData
 

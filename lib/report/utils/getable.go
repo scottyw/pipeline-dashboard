@@ -64,6 +64,7 @@ func (g *Getable) Cache(client *redis.Client, url string, body []byte) {
 }
 
 func (g *Getable) Get(urlWithOptions string) []byte {
+	/* I think this is here to not overload Jenkins */
 	time.Sleep(time.Second / 100)
 
 	var body []byte

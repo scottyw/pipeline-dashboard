@@ -1,9 +1,5 @@
 package jenkins_types
 
-import (
-	"encoding/json"
-)
-
 /*
  * _class: "jenkins.metrics.impl.TimeInQueueAction"
  */
@@ -21,14 +17,8 @@ type TimeInQueue struct {
 	WaitingTimeMillis       int
 }
 
-func (b *Build) GetTimeInQueue() {
+// Milliseconds
+func (t *TimeInQueue) QueueTime() int {
 	// var project string
-
-	for _, action := range b.Actions {
-		if action.Class == "jenkins.metrics.impl.TimeInQueueAction" {
-			actionBytes, _ := json.Marshal(action)
-			json.Unmarshal(actionBytes, &b.TimeInQueue)
-		}
-	}
-
+	return t.BlockedDurationMillis + t.BuildableDurationMillis
 }

@@ -2,9 +2,10 @@ package csv_writers
 
 import (
 	"encoding/csv"
+	"os"
+
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/jenkins_types"
 	"github.com/puppetlabs/pipeline-dashboard/lib/report/utils"
-	"os"
 )
 
 func WritePipelines(allPipelines []jenkins_types.Pipeline) {
@@ -28,6 +29,8 @@ func WritePipelines(allPipelines []jenkins_types.Pipeline) {
 		"Wall Clock Time Minutes",
 		"Total Hours",
 		"Total Minutes",
+		"Queue Time Hours",
+		"Queue Time Minutes",
 		"Errors",
 		"Transients",
 	})

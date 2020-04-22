@@ -23,6 +23,8 @@ type Pipeline struct {
 	WallClockTimeHours   int64
 	TotalMinutes         int
 	TotalHours           int
+	QueueTimeMinutes     int
+	QueueTimeHours       int
 	Errors               int
 	Transients           int
 }
@@ -70,6 +72,8 @@ func (ajd *Pipeline) StringArray() []string {
 		fmt.Sprintf("%d", ajd.JobData.WallClockTimeMinutes),
 		fmt.Sprintf("%d", ajd.JobData.TotalHours),
 		fmt.Sprintf("%d", ajd.JobData.TotalMinutes),
+		fmt.Sprintf("%d", ajd.JobData.QueueTimeHours),
+		fmt.Sprintf("%d", ajd.JobData.QueueTimeMinutes),
 		fmt.Sprintf("%d", ajd.Errors),
 		fmt.Sprintf("%d", ajd.Transients),
 	}

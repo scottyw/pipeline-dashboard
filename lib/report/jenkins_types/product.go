@@ -1,3 +1,8 @@
+/*
+ * The Product strut is used for two reasons.  The GetProducts function is used to supply a list of products
+ * The SetVals Function is used to combine all of the data from all the jobs in each product.
+ *
+ */
 package jenkins_types
 
 import (
@@ -18,6 +23,7 @@ type Product struct {
 	WallClockTimeMinutes int
 	TotalTimeMinutes     int
 	TotalTimeDuration    string
+	QueueTimeMinutes     int
 	Errors               int
 	Transients           int
 }
@@ -43,8 +49,9 @@ func (p *Product) SetVals(jobs []Pipeline) {
 	p.StartTime = time.Now().AddDate(0, 0, 365)
 	p.EndTime = time.Now().AddDate(0, 0, -365)
 
-	p.TotalTimeMinutes = 0
 	p.Errors = 0
+	p.QueueTimeMinutes = 0
+	p.TotalTimeMinutes = 0
 	p.Transients = 0
 
 	for _, job := range jobs {
@@ -72,11 +79,14 @@ func (p *Product) SetVals(jobs []Pipeline) {
 
 			totalJobMinutes, _ := strconv.Atoi(job.JobDataStrings.TotalMinutes)
 			totalJobHours, _ := strconv.Atoi(job.JobDataStrings.TotalHours)
+			p.TotalTimeMinutes = p.TotalTimeMinutes + totalJobMinutes + totalJobHours*60
 
 			p.Errors = p.Errors + job.Errors
 			p.Transients = p.Transients + job.Transients
 
-			p.TotalTimeMinutes = p.TotalTimeMinutes + totalJobMinutes + totalJobHours*60
+			queueJobMinutes, _ := strconv.Atoi(job.JobDataStrings.QueueTimeMinutes)
+			queueJobHours, _ := strconv.Atoi(job.JobDataStrings.QueueTimeHours)
+			p.QueueTimeMinutes = p.QueueTimeMinutes + queueJobMinutes + queueJobHours*60
 		}
 	}
 

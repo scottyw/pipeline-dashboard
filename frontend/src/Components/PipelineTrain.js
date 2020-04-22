@@ -30,6 +30,12 @@ class PipelineTrain extends Component {
         <div className="col-5">
         </div>
         <div className="col-2">
+          {this.props.train.queueTimeFormatted()}
+        </div>
+        <div className="col-2">
+          {this.props.train.wallClockTime}
+        </div>
+        <div className="col-2">
           {this.props.train.durationFormatted()}
         </div>
         <div className="col-1">

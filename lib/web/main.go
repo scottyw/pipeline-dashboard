@@ -61,6 +61,8 @@ func (h *Handlers) GeneratePageData() *Page {
 				WallClockTimeMinutes: line[9],
 				TotalHours:           line[10],
 				TotalMinutes:         line[11],
+				QueueTimeHours:       line[12],
+				QueueTimeMinutes:     line[13],
 			},
 			Errors:     errors,
 			Transients: transients,
@@ -85,22 +87,31 @@ func (h *Handlers) GeneratePageData() *Page {
 		hours := minutes / 60
 		minutesLeft := int(minutes) % 60
 
-		errors, _ := strconv.Atoi(line[8])
-		transients, _ := strconv.Atoi(line[9])
+		queueMinutes, _ := strconv.ParseFloat(line[5], 64)
+		queueHours := queueMinutes / 60
+		queueMinutesLeft := int(queueMinutes) % 60
+
+		errors, _ := strconv.Atoi(line[9])
+		transients, _ := strconv.Atoi(line[10])
 
 		trains = append(trains, jenkins_types.TrainStrings{
-			Pipeline:            line[0],
-			Version:             line[1],
-			URL:                 line[2],
-			Name:                line[3],
-			DurationSortMinutes: int(minutes),
-			DurationMinutes:     fmt.Sprintf("%d", int(minutesLeft)),
-			DurationHours:       fmt.Sprintf("%d", int(hours)),
-			StartTime:           line[5],
-			EndTime:             line[6],
-			Timestamp:           line[7],
-			Errors:              errors,
-			Transients:          transients,
+			Pipeline:             line[0],
+			Version:              line[1],
+			URL:                  line[2],
+			Name:                 line[3],
+			DurationSortMinutes:  int(minutes),
+			DurationMinutes:      fmt.Sprintf("%d", int(minutesLeft)),
+			DurationHours:        fmt.Sprintf("%d", int(hours)),
+			QueueTimeSortMinutes: int(queueMinutes),
+			QueueTimeMinutes:     fmt.Sprintf("%d", int(queueMinutesLeft)),
+			QueueTimeHours:       fmt.Sprintf("%d", int(queueHours)),
+			StartTime:            line[6],
+			EndTime:              line[7],
+			Timestamp:            line[8],
+			Errors:               errors,
+			Transients:           transients,
+			Platform:             line[11],
+			PlatformVersion:      line[12],
 		})
 	}
 
