@@ -27,7 +27,7 @@ func (g *Getable) GetRedisClient() *redis.Client {
 		DB:       0,  // use default DB
 	})
 
-	_, _ = g.client.Ping().Result()
+	_, _ = g.client.Ping(g.client.Context()).Result()
 
 	return g.client
 }
@@ -36,7 +36,7 @@ func (g *Getable) Cached(client *redis.Client, url string) (bool, []byte) {
 	fmt.Println("FOO:", os.Getenv("FOO"))
 
 	var retval []byte
-	val2, err := client.Get(url).Result()
+	val2, err := client.Get(client.Context(), url).Result()
 
 	if err == redis.Nil {
 		return false, retval
@@ -54,13 +54,13 @@ func (g *Getable) Cache(client *redis.Client, url string, body []byte) {
 	}
 
 	fmt.Printf("Setting %s in redis.", url)
-	err := client.Set(url, string(body), 0).Err()
+	err := client.Set(client.Context(), url, string(body), 0).Err()
 
 	if err != nil {
 		panic(err)
 	}
 
-	client.Expire(url, 3600000000)
+	client.Expire(client.Context(), url, 3600000000)
 }
 
 func (g *Getable) Get(urlWithOptions string) []byte {
